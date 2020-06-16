@@ -1,0 +1,79 @@
+{
+    "common": {
+        "name": "rtl_433",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "rtl433",
+        "titleLang": {
+            "en": "rtl433",
+            "de": "rtl433",
+            "ru": "rtl433",
+            "pt": "rtl433",
+            "nl": "rtl433",
+            "fr": "rtl433",
+            "it": "rtl433",
+            "es": "rtl433",
+            "pl": "rtl433",
+            "zh-cn": "rtl433"
+        },
+        "desc": {
+            "en": "Spawns rtl_433 utility instantiates sensors",
+            "de": "Spawns rtl_433 utility instantiates sensors",
+            "ru": "Spawns rtl_433 utility instantiates sensors",
+            "pt": "Spawns rtl_433 utility instantiates sensors",
+            "nl": "Spawns rtl_433 utility instantiates sensors",
+            "fr": "Spawns rtl_433 utility instantiates sensors",
+            "it": "Spawns rtl_433 utility instantiates sensors",
+            "es": "Spawns rtl_433 utility instantiates sensors",
+            "pl": "Spawns rtl_433 utility instantiates sensors",
+            "zh-cn": "Spawns rtl_433 utility instantiates sensors"
+        },
+        "authors": [
+            "Sean Phillips <sean.c.phillips@gmail.com>"
+        ],
+        "keywords": [
+            "rtl_433",
+            "433MHz",
+            "thermometers",
+            "contact"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "rtl_433.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/phillipssc/ioBroker.rtl_433/master/admin/rtl_433.png",
+        "readme": "https://github.com/phillipssc/ioBroker.rtl_433/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "protocols",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "push",
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
+    },
+    "native": {
+        "option1": true,
+        "option2": "42"
+    },
+    "objects": [],
+    "instanceObjects": []
+}
