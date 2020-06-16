@@ -5,14 +5,14 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.rtl_433.svg)](https://www.npmjs.com/package/iobroker.rtl_433)
 ![Number of Installations (latest)](http://iobroker.live/badges/rtl_433-installed.svg)
 ![Number of Installations (stable)](http://iobroker.live/badges/rtl_433-stable.svg)
-[![Dependency Status](https://img.shields.io/david/Sean Phillips/iobroker.rtl_433.svg)](https://david-dm.org/Sean Phillips/iobroker.rtl_433)
-[![Known Vulnerabilities](https://snyk.io/test/github/Sean Phillips/ioBroker.rtl_433/badge.svg)](https://snyk.io/test/github/Sean Phillips/ioBroker.rtl_433)
+[![Dependency Status](https://img.shields.io/david/phillipssc/iobroker.rtl_433.svg)](https://david-dm.org/Sean Phillips/iobroker.rtl_433)
+[![Known Vulnerabilities](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433/badge.svg)](https://snyk.io/test/github/Sean Phillips/ioBroker.rtl_433)
 
 [![NPM](https://nodei.co/npm/iobroker.rtl_433.png?downloads=true)](https://nodei.co/npm/iobroker.rtl_433/)
 
 ## rtl_433 adapter for ioBroker
 
-Spawns rtl_433 utility instantiates sensors
+rtl_433 adapter for ioBroker
 
 ## Developer manual
 This section is intended for the developer. It can be deleted later
@@ -29,7 +29,7 @@ You are almost done, only a few steps left:
     ```
 1. Link your local repository with the one on GitHub:  
     ```bash
-    git remote add origin https://github.com/Sean Phillips/ioBroker.rtl_433
+    git remote add origin https://github.com/phillipssc/ioBroker.rtl_433
     ```
 
 1. Push all files to the GitHub repo:  
