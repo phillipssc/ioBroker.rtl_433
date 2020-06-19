@@ -1,6 +1,6 @@
 {
   "name": "iobroker.rtl_433",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Spawns rtl_433 utility instantiates sensors",
   "author": {
     "name": "Sean Phillips",
