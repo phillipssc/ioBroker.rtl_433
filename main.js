@@ -8,9 +8,9 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 let   server      = null;
-const Rtl_433       = process.env.DEBUG ? require('./lib/rtl_433.debug.js') : require('./lib/rtl_433.js');
+const Rtl_433     = require('./lib/rtl_433.js');
 const adapterName = require('./package.json').name.split('.').pop();
-const createUtils = require('./lib/interface.js');
+const BrokerInterface = require('iobroker.rtl_433/lib/brokerInterface');
 const { exit } = require('process');
 
 
@@ -44,18 +44,22 @@ class Rtl433 extends utils.Adapter {
       log: this.log 
     });
 
-    server.on('connectionChange', connected => {
-      // if (!connected) skipFirst = true;
-      this.setState('info.connection', connected, true);
-      if (!connected) {
+    const brokerInterface = new BrokerInterface({
+      adapter: this, 
+    });
+
+    server.on('connectionChange', connectState => {
+      if (connectState !== 0) {
+        this.setState('info.connection', false, true);
         this.log.error('Disconnected');
         exit(-1);
       }
+      this.setState('info.connection', true, true);
     });
 
     server.on('data', data => {
       if (this.config.verbose) { this.log.info(`${adapterName}:${data}`); }
-      createUtils.handleIncomingObject(this, server, data);
+      brokerInterface.handleIncomingObject(data);
     });
 
     // // The adapters config (in the instance object everything under the attribute "native") is accessible via
