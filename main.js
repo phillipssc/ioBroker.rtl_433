@@ -9,6 +9,10 @@
 const utils = require('@iobroker/adapter-core');
 let   server      = null;
 const Rtl_433       = process.env.DEBUG ? require('./lib/rtl_433.debug.js') : require('./lib/rtl_433.js');
+const adapterName = require('./package.json').name.split('.').pop();
+const createUtils = require('./lib/interface.js');
+const { exit } = require('process');
+
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -37,18 +41,21 @@ class Rtl433 extends utils.Adapter {
     // Initialize your adapter here
     server = new Rtl_433({
       config: this.config, 
-      log: this.log, 
-      err: err => {
-        if (err) {
-          if (err.errno === "ENOENT") { this.log.warn('Command not found'); }
-          else if (err.errno === "EACCES") { this.log.warn('Command not executable'); }
-          else { this.log.warn('error: ' + err); }
-        }
+      log: this.log 
+    });
+
+    server.on('connectionChange', connected => {
+      // if (!connected) skipFirst = true;
+      this.setState('info.connection', connected, true);
+      if (!connected) {
+        this.log.error('Disconnected');
+        exit(-1);
       }
     });
 
     server.on('data', data => {
-      this.log.debug(data);
+      if (this.config.verbose) { this.log.info(`${adapterName}:${data}`); }
+      createUtils.handleIncomingObject(this, server, data);
     });
 
     // // The adapters config (in the instance object everything under the attribute "native") is accessible via

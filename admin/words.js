@@ -14,8 +14,8 @@ systemDictionary = {
         'pl': 'Ustawienia adaptera dla rtl_433',
         'zh-cn': 'rtl_433的适配器设置'
     },
-    'option1': {
-        'en': 'option1',
+    'verbose': {
+        'en': 'verbose',
         'de': 'option1',
         'ru': 'option1',
         'pt': 'option1',
@@ -26,8 +26,44 @@ systemDictionary = {
         'pl': 'option1',
         'zh-cn': 'option1'
     },
-    'option2': {
-        'en': 'option2',
+    'protocols': {
+        'en': 'protocols',
+        'de': 'option2',
+        'ru': 'option2',
+        'pt': 'option2',
+        'nl': 'option2',
+        'fr': 'option2',
+        'it': 'option2',
+        'es': 'option2',
+        'pl': 'option2',
+        'zh-cn': 'option2'
+    },
+    'C_or_F': {
+        'en': 'C or F',
+        'de': 'option2',
+        'ru': 'option2',
+        'pt': 'option2',
+        'nl': 'option2',
+        'fr': 'option2',
+        'it': 'option2',
+        'es': 'option2',
+        'pl': 'option2',
+        'zh-cn': 'option2'
+    },
+    "frequency": {
+        'en': 'frequency',
+        'de': 'option2',
+        'ru': 'option2',
+        'pt': 'option2',
+        'nl': 'option2',
+        'fr': 'option2',
+        'it': 'option2',
+        'es': 'option2',
+        'pl': 'option2',
+        'zh-cn': 'option2'
+    },
+    "adapterno": {
+        'en': 'Adapter Index',
         'de': 'option2',
         'ru': 'option2',
         'pt': 'option2',

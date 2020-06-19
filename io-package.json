@@ -71,8 +71,11 @@
         ]
     },
     "native": {
-        "option1": true,
-        "option2": "42"
+        "verbose": true,
+        "protocols": "",
+        "C_or_F": "C",
+        "frequency": "",
+        "adapterno": ""
     },
     "objects": [],
     "instanceObjects": []
