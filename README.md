@@ -3,9 +3,9 @@
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.rtl_433.svg)](https://www.npmjs.com/package/iobroker.rtl_433)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.rtl_433.svg)](https://www.npmjs.com/package/iobroker.rtl_433)
-![Number of Installations (latest)](http://iobroker.live/badges/rtl_433-installed.svg)
-![Number of Installations (stable)](http://iobroker.live/badges/rtl_433-stable.svg)
-[![Dependency Status](https://img.shields.io/david/Sean Phillips/iobroker.rtl_433.svg)](https://david-dm.org/Sean Phillips/iobroker.rtl_433)
+<!-- ![Number of Installations (latest)](http://iobroker.live/badges/rtl_433-installed.svg)
+![Number of Installations (stable)](http://iobroker.live/badges/rtl_433-stable.svg) -->
+[![Dependency Status](https://img.shields.io/david/phillipssc/iobroker.rtl_433.svg)](https://david-dm.org/phillipssc/iobroker.rtl_433)
 [![Known Vulnerabilities](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433/badge.svg)](https://snyk.io/test/github/Sean Phillips/ioBroker.rtl_433)
 
 [![NPM](https://nodei.co/npm/iobroker.rtl_433.png?downloads=true)](https://nodei.co/npm/iobroker.rtl_433/)
@@ -26,7 +26,7 @@ Currently this adapter supports devices that return temperatures, humidity, atmo
 * initial functional release
 ### 0.0.3
 * many fixes
-### 0.1.0
+### 0.1.1
 * new schema for objects, signal data, concept of 'alive'
 
 ## License
