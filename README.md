@@ -6,7 +6,7 @@
 <!-- ![Number of Installations (latest)](http://iobroker.live/badges/rtl_433-installed.svg)
 ![Number of Installations (stable)](http://iobroker.live/badges/rtl_433-stable.svg) -->
 [![Dependency Status](https://img.shields.io/david/phillipssc/iobroker.rtl_433.svg)](https://david-dm.org/phillipssc/iobroker.rtl_433)
-[![Known Vulnerabilities](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433/badge.svg)](https://snyk.io/test/github/Sean Phillips/ioBroker.rtl_433)
+[![Known Vulnerabilities](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433/badge.svg)](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433)
 
 [![NPM](https://nodei.co/npm/iobroker.rtl_433.png?downloads=true)](https://nodei.co/npm/iobroker.rtl_433/)
 
