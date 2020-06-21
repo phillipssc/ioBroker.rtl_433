@@ -5,7 +5,7 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.rtl_433.svg)](https://www.npmjs.com/package/iobroker.rtl_433)
 ![Number of Installations (latest)](http://iobroker.live/badges/rtl_433-installed.svg)
 ![Number of Installations (stable)](http://iobroker.live/badges/rtl_433-stable.svg)
-[![Dependency Status](https://img.shields.io/david/phillipssc/iobroker.rtl_433.svg)](https://david-dm.org/Sean Phillips/iobroker.rtl_433)
+[![Dependency Status](https://img.shields.io/david/Sean Phillips/iobroker.rtl_433.svg)](https://david-dm.org/Sean Phillips/iobroker.rtl_433)
 [![Known Vulnerabilities](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433/badge.svg)](https://snyk.io/test/github/Sean Phillips/ioBroker.rtl_433)
 
 [![NPM](https://nodei.co/npm/iobroker.rtl_433.png?downloads=true)](https://nodei.co/npm/iobroker.rtl_433/)
@@ -14,79 +14,20 @@
 
 rtl_433 adapter for ioBroker
 
-## Developer manual
-This section is intended for the developer. It can be deleted later
+The adapter requires the awesome utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  As is often the case with USB adapters the device might not be ready the first time it tries, may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
 
-### Getting started
-
-You are almost done, only a few steps left:
-1. Create a new repository on GitHub with the name `ioBroker.rtl_433`
-1. Initialize the current folder as a new git repository:  
-    ```bash
-    git init
-    git add .
-    git commit -m "Initial commit"
-    ```
-1. Link your local repository with the one on GitHub:  
-    ```bash
-    git remote add origin https://github.com/phillipssc/ioBroker.rtl_433
-    ```
-
-1. Push all files to the GitHub repo:  
-    ```bash
-    git push origin master
-    ```
-1. Head over to [main.js](main.js) and start programming!
-
-### Best Practices
-We've collected some [best practices](https://github.com/ioBroker/ioBroker.repositories#development-and-coding-best-practices) regarding ioBroker development and coding in general. If you're new to ioBroker or Node.js, you should
-check them out. If you're already experienced, you should also take a look at them - you might learn something new :)
-
-### Scripts in `package.json`
-Several npm scripts are predefined for your convenience. You can run them using `npm run <scriptname>`
-| Script name | Description                                              |
-|-------------|----------------------------------------------------------|
-| `test:js`   | Executes the tests you defined in `*.test.js` files.     |
-| `test:package`    | Ensures your `package.json` and `io-package.json` are valid. |
-| `test` | Performs a minimal test run on package files and your tests. |
-| `lint` | Runs `ESLint` to check your code for formatting errors and potential bugs. |
-
-### Writing tests
-When done right, testing code is invaluable, because it gives you the 
-confidence to change your code while knowing exactly if and when 
-something breaks. A good read on the topic of test-driven development 
-is https://hackernoon.com/introduction-to-test-driven-development-tdd-61a13bc92d92. 
-Although writing tests before the code might seem strange at first, but it has very 
-clear upsides.
-
-The template provides you with basic tests for the adapter startup and package files.
-It is recommended that you add your own tests into the mix.
-
-### Publishing the adapter
-To get your adapter released in ioBroker, please refer to the documentation 
-of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository).
-
-### Test the adapter manually on a local ioBroker installation
-In order to install the adapter locally without publishing, the following steps are recommended:
-1. Create a tarball from your dev directory:  
-    ```bash
-    npm pack
-    ```
-1. Upload the resulting file to your ioBroker host
-1. Install it locally (The paths are different on Windows):
-    ```bash
-    cd /opt/iobroker
-    npm i /path/to/tarball.tgz
-    ```
-
-For later updates, the above procedure is not necessary. Just do the following:
-1. Overwrite the changed files in the adapter directory (`/opt/iobroker/node_modules/iobroker.rtl_433`)
-1. Execute `iobroker upload rtl_433` on the ioBroker host
+Currently this adapter supports devices that return temperatures, humidity, atmospheric pressure, and some contact sensors that return "cmd & tristate" values.   The types of sensors supported can easily be extended by modifying lib/datapoints.js.  Turning on verbose in the settings will show the JSON formatted data from the rtl_433 program
 
 ## Changelog
 
 ### 0.0.1
 * (Sean Phillips) initial release
+### 0.0.2
+* initial functional release
+### 0.0.3
+* many fixes
+### 0.1.0
+* new schema for objects, signal data, concept of 'alive'
 
 ## License
 MIT License
