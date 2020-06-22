@@ -5,18 +5,33 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.rtl_433.svg)](https://www.npmjs.com/package/iobroker.rtl_433)
 <!-- ![Number of Installations (latest)](http://iobroker.live/badges/rtl_433-installed.svg)
 ![Number of Installations (stable)](http://iobroker.live/badges/rtl_433-stable.svg) -->
-[![Dependency Status](https://img.shields.io/david/phillipssc/iobroker.rtl_433.svg)](https://david-dm.org/phillipssc/iobroker.rtl_433)
+[![Dependency Status](https://img.shields.io/david/phillipssc/iobroker.rtl_433.svg)](https://david-dm.org/phillipssc/ioBroker.rtl_433)
 [![Known Vulnerabilities](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433/badge.svg)](https://snyk.io/test/github/phillipssc/ioBroker.rtl_433)
 
-[![NPM](https://nodei.co/npm/iobroker.rtl_433.png?downloads=true)](https://nodei.co/npm/iobroker.rtl_433/)
+[![NPM](https://nodei.co/npm/iobroker.rtl_433.png?downloads=true)](https://nodei.co/npm/ioBroker.rtl_433/)
 
 ## rtl_433 adapter for ioBroker
 
 rtl_433 adapter for ioBroker
 
-The adapter requires the awesome utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  As is often the case with USB adapters the device might not be ready the first time it tries, may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
+This adapter allows you to integrate data from the airwaves into ioBroker using an inexpensive RTL-SDR USB stick.  These are built around chips originally used to tune in analog TV signals but are now used as software defined radios.  433 MHz is a common frequency as it is open in the US.  The software defined radio is capable of tuning in most of the open frequency bands, the parameters of this adapter allow you to configure the frequency you need.  Untested yet, but you should be able to use multiple USB sticks to monitor multiple frequencies using more than one instance of iobroker.rtl_433.
 
-Currently this adapter supports devices that return temperatures, humidity, atmospheric pressure, and some contact sensors that return "cmd & tristate" values.   The types of sensors supported can easily be extended by modifying lib/datapoints.js.  Turning on verbose in the settings will show the JSON formatted data from the rtl_433 program
+The reason for the 433 in the name is that the adapter requires the utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  The utility site shows all of the protocols it understands, all the remote sensors that can be integrated with this adapter. As is often the case with USB adapters the device might not be ready the first time it tries to start and may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
+
+This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON so currently this adapter supports devices that return temperatures, humidity, atmospheric pressure, and some contact sensors.   The types of sensors supported can easily be extended by modifying lib/datapoints.js.  Turning on verbose in the settings will show the JSON formatted data from the rtl_433 program.
+
+#### Supported rtl_433 data types from datapoints.js
+1. cmd
+1. tristate
+1. humidity
+1. temperature_C
+1. temperature_F
+1. pressure_inHg
+1. pressure_hPa
+1. channel
+1. battery_ok
+
+The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
 
 ## Changelog
 
