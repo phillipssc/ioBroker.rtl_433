@@ -34,6 +34,8 @@ Note: The meta-data includes an alive state.  This is only pertinent to devices 
 * new schema for objects, signal data, concept of 'alive'
 ### 0.1.1
 * more sensors supported, info.connection implemented, uptime formatted
+### 0.1.2
+* include feature to capture your own then stop "collecting" new devices, other coniguration changes
 
 ## License
 MIT License
