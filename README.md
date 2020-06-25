@@ -18,20 +18,9 @@ This adapter allows you to integrate data from the airwaves into ioBroker using 
 
 The reason for the 433 in the name is that the adapter requires the utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  The utility site shows all of the protocols it understands, all the remote sensors that can be integrated with this adapter. As is often the case with USB adapters the device might not be ready the first time it tries to start and may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
 
-This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON so currently this adapter supports devices that return temperatures, humidity, atmospheric pressure, and some contact sensors.   The types of sensors supported can easily be extended by modifying lib/datapoints.js.  Turning on verbose in the settings will show the JSON formatted data from the rtl_433 program.
+This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON but I have gone through the test cases on the project collecting most of the possible keys.  If a data type is not recognized it will simply be imported as string/value.  The keys of responses supported can easily be extended by modifying lib/datapoints.js.  Turning on verbose in the settings will show the JSON formatted data from the rtl_433 program.
 
-#### Supported rtl_433 data types from datapoints.js
-1. cmd
-1. tristate
-1. humidity
-1. temperature_C
-1. temperature_F
-1. pressure_inHg
-1. pressure_hPa
-1. channel
-1. battery_ok
-
-The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
+Note: The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
 
 ## Changelog
 
@@ -41,8 +30,10 @@ The meta-data includes an alive state.  This is only pertinent to devices that r
 * initial functional release
 ### 0.0.3
 * many fixes
-### 0.1.1
+### 0.1.0
 * new schema for objects, signal data, concept of 'alive'
+### 0.1.1
+* more sensors supported, info.connection implemented, uptime formatted
 
 ## License
 MIT License

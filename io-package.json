@@ -71,12 +71,37 @@
         ]
     },
     "native": {
+        "include": true,
         "verbose": false,
         "protocols": "",
         "C_or_F": "C",
         "frequency": "",
-        "adapterno": ""
+        "adapterno": "",
+        "killcheckinterval": 30000,
+        "lifetime": 60000
     },
     "objects": [],
-    "instanceObjects": []
-}
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Whether rtl_433 is connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+  }

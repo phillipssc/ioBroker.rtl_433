@@ -11,6 +11,7 @@ let   server      = null;
 const Rtl_433     = require('./lib/rtl_433.js');
 const adapterName = require('./package.json').name.split('.').pop();
 const BrokerInterface = require('iobroker.rtl_433/lib/brokerInterface');
+let   brokerInterface = null;
 const { exit } = require('process');
 
 class Rtl433 extends utils.Adapter {
@@ -39,17 +40,22 @@ class Rtl433 extends utils.Adapter {
       log: this.log 
     });
 
-    const brokerInterface = new BrokerInterface({
+    brokerInterface = new BrokerInterface({
       adapter: this, 
     });
 
-    server.on('connectionChange', connectState => {
-      if (connectState !== 0) {
-        this.setState('info.connection', false, true);
-        this.log.error('Disconnected');
-        exit(-1);
+    server.on('connectionChange', (connectState) => {
+      this.setState('info.connection', connectState, true);
+      if (!connectState) {
+        this.log.error('rtl_433 disconnected');
+        // setTimeout(() => {
+        //   server = new Rtl_433({
+        //     config: this.config, 
+        //     log: this.log 
+        //   });
+        // }, 2000);
+        this.terminate(2);
       }
-      this.setState('info.connection', true, true);
     });
 
     server.on('data', data => {
@@ -64,6 +70,7 @@ class Rtl433 extends utils.Adapter {
    */
   onUnload(callback) {
     try {
+      brokerInterface.cleanUp();
       this.log.info('cleaned everything up...');
       callback();
     } catch (e) {
@@ -83,6 +90,7 @@ class Rtl433 extends utils.Adapter {
     } else {
       // The object was deleted
       this.log.info(`object ${id} deleted`);
+      brokerInterface.getDevices();
     }
   }
 
