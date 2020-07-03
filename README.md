@@ -35,7 +35,9 @@ Note: The meta-data includes an alive state.  This is only pertinent to devices 
 ### 0.1.1
 * more sensors supported, info.connection implemented, uptime formatted
 ### 0.1.2
-* include feature to capture your own then stop "collecting" new devices, other coniguration changes
+* "include" feature to capture your own then stop the creation of new devices, other coniguration changes
+### 0.1.3
+* automatically add missing states to existing device, helps future proof the adapter.  Added protocol to INFO, can be used to know what the device is capable of. 
 
 ## License
 MIT License
