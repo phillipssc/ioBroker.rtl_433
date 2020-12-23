@@ -24,16 +24,6 @@ Note: The meta-data includes an alive state.  This is only pertinent to devices 
 
 ## Changelog
 
-### 0.0.1
-* (Sean Phillips) initial release
-### 0.0.2
-* initial functional release
-### 0.0.3
-* many fixes
-### 0.1.0
-* new schema for objects, signal data, concept of 'alive'
-### 0.1.1
-* more sensors supported, info.connection implemented, uptime formatted
 ### 0.1.2
 * "include" feature to capture your own then stop the creation of new devices, other coniguration changes
 ### 0.1.3
