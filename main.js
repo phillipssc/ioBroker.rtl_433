@@ -48,12 +48,6 @@ class Rtl433 extends utils.Adapter {
       this.setState('info.connection', connectState, true);
       if (!connectState) {
         this.log.error('rtl_433 disconnected');
-        // setTimeout(() => {
-        //   server = new Rtl_433({
-        //     config: this.config, 
-        //     log: this.log 
-        //   });
-        // }, 2000);
         this.terminate(2);
       }
     });
