@@ -39,7 +39,7 @@ Note: The meta-data includes an alive state.  This is only pertinent to devices 
 ### 0.1.3
 * automatically add missing states to existing device, helps future proof the adapter.  Added protocol to INFO, can be used to know what the device is capable of. 
 ### 1.0.0
-* Full package compliance and registration
+* This has been oeprating successfully for over a half a year on my local installation. I have decided to move it to 1.0 designation with full ioBroker package compliance and registration
 
 ## License
 MIT License
