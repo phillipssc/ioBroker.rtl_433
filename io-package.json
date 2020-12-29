@@ -3,7 +3,7 @@
         "name": "rtl_433",
         "version": "1.0.0",
         "news": {
-            "0.0.1": {
+            "1.0.0": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
                 "ru": "Начальная версия",
@@ -16,18 +16,18 @@
                 "zh-cn": "首次出版"
             }
         },
-        "title": "rtl433",
+        "title": "rtl_433",
         "titleLang": {
-            "en": "rtl433",
-            "de": "rtl433",
-            "ru": "rtl433",
-            "pt": "rtl433",
-            "nl": "rtl433",
-            "fr": "rtl433",
-            "it": "rtl433",
-            "es": "rtl433",
-            "pl": "rtl433",
-            "zh-cn": "rtl433"
+            "en": "rtl_433",
+            "de": "rtl_433",
+            "ru": "rtl_433",
+            "pt": "rtl_433",
+            "nl": "rtl_433",
+            "fr": "rtl_433",
+            "it": "rtl_433",
+            "es": "rtl_433",
+            "pl": "rtl_433",
+            "zh-cn": "rtl_433"
         },
         "desc": {
             "en": "Spawns rtl_433 utility instantiates sensors",
