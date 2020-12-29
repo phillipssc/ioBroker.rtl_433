@@ -18,6 +18,8 @@ This adapter allows you to integrate data from the airwaves into ioBroker using 
 
 The reason for the 433 in the name is that the adapter requires the utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  The utility site shows all of the protocols it understands, all the remote sensors that can be integrated with this adapter. As is often the case with USB adapters the device might not be ready the first time it tries to start and may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
 
+If it does not start you will need to check your rtl_433 installation. The rtl_433 version needs to be at least from the year 2020. The rtl-sdr utility must be installed as well as the iobroker user needs to have permission to access the USB port.
+
 This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON but I have gone through the test cases on the project collecting most of the possible keys.  If a data type is not recognized it will simply be imported as string/value.  The keys of responses supported can easily be extended by modifying lib/datapoints.js.  Turning on verbose in the settings will show the JSON formatted data from the rtl_433 program.
 
 Note: The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
@@ -29,7 +31,7 @@ Note: The meta-data includes an alive state.  This is only pertinent to devices 
 ### 0.1.3
 * automatically add missing states to existing device, helps future proof the adapter.  Added protocol to INFO, can be used to know what the device is capable of. 
 ### 1.0.0
-* This has been oeprating successfully for over a half a year on my local installation. I have decided to move it to 1.0 designation with full ioBroker package compliance and registration
+* This has been operating successfully for over a half a year on my local installation with window/door contacts and temperature senders helping me control HVAC. In code I have added error messages to indicate issues with rtl_sdr for clarity. I have cleaned up the code and ioBroker package compliance (except travis won't have rtl_433) and registration.
 
 ## License
 MIT License
