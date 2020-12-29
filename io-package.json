@@ -4,7 +4,7 @@
         "version": "1.0.0",
         "news": {
             "1.0.0": {
-                "en": "initial release",
+                "en": "This has been operating successfully for over a half a year on my local installation with window/door contacts and temperature senders helping me control HVAC. In code I have added error messages to indicate issues with rtl_sdr for clarity. I have cleaned up the code and ioBroker package compliance (except travis won't have rtl_433) and registration.",
                 "de": "Erstveröffentlichung",
                 "ru": "Начальная версия",
                 "pt": "lançamento inicial",
