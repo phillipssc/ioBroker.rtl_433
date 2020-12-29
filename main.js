@@ -14,7 +14,7 @@ const BrokerInterface = require('iobroker.rtl_433/lib/brokerInterface');
 let   brokerInterface = null;
 const { exit } = require('process');
 
-class Rtl433 extends utils.Adapter {
+class rtl_433 extends utils.Adapter {
 
   /**
    * @param {Partial<utils.AdapterOptions>} [options={}]
@@ -110,8 +110,8 @@ if (module.parent) {
   /**
    * @param {Partial<utils.AdapterOptions>} [options={}]
    */
-  module.exports = (options) => new Rtl433(options);
+  module.exports = (options) => new rtl_433(options);
 } else {
   // otherwise start the instance directly
-  new Rtl433();
+  new rtl_433();
 }
