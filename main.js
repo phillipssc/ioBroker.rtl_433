@@ -53,7 +53,7 @@ class rtl_433 extends utils.Adapter {
     });
 
     server.on('data', data => {
-      if (this.config.verbose) { this.log.info(`${adapterName}:${data}`); }
+      this.log.info(`${adapterName}:${data}`);
       brokerInterface.handleIncomingObject(data);
     });
   }
@@ -80,10 +80,10 @@ class rtl_433 extends utils.Adapter {
   onObjectChange(id, obj) {
     if (obj) {
       // The object was changed
-      this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
+      this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
     } else {
       // The object was deleted
-      this.log.info(`object ${id} deleted`);
+      this.log.debug(`object ${id} deleted`);
       brokerInterface.getDevices();
     }
   }
@@ -96,10 +96,10 @@ class rtl_433 extends utils.Adapter {
   onStateChange(id, state) {
     if (state) {
       // The state was changed
-      this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+      this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
     } else {
       // The state was deleted
-      this.log.info(`state ${id} deleted`);
+      this.log.debug(`state ${id} deleted`);
     }
   }
 }
