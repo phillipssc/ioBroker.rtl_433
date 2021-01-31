@@ -53,7 +53,7 @@ class rtl_433 extends utils.Adapter {
     });
 
     server.on('data', data => {
-      this.log.info(`${adapterName}:${data}`);
+      this.log.debug(`${adapterName}:${data}`);
       brokerInterface.handleIncomingObject(data);
     });
   }
