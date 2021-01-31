@@ -14,7 +14,9 @@
 
 rtl_433 adapter for ioBroker
 
-This adapter allows you to integrate data from the airwaves into ioBroker using an inexpensive RTL-SDR USB stick.  These are built around chips originally used to tune in analog TV signals but are now used as software defined radios.  433 MHz is a common frequency as it is open in the US.  The software defined radio is capable of tuning in most of the open frequency bands, the parameters of this adapter allow you to configure the frequency you need.  Untested yet, but you should be able to use multiple USB sticks to monitor multiple frequencies using more than one instance of iobroker.rtl_433.
+This adapter allows you to integrate data from the airwaves into ioBroker using an inexpensive RTL-SDR USB stick.  These are built around chips originally used to tune in analog TV signals but are now used as software defined radios.  433 MHz is a common frequency as it is open in the US.  The software defined radio is capable of tuning in most of the open frequency bands, the parameters of this adapter allow you to configure the frequency you need.  
+
+You can use multiple RTL-SDR dongles to monitor multiple frequencies by setting up more than one instance of iobroker.rtl_433.  Set the index number of the dongle as the rtl_433 recognizes it in the index setting (e.g. 0, 1, 2, etc...)
 
 The reason for the 433 in the name is that the adapter requires the utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  The utility site shows all of the protocols it understands, all the remote sensors that can be integrated with this adapter. As is often the case with USB adapters the device might not be ready the first time it tries to start and may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
 
