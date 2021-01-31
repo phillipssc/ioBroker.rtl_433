@@ -10,9 +10,8 @@ const utils = require('@iobroker/adapter-core');
 let   server      = null;
 const Rtl_433     = require('./lib/rtl_433.js');
 const adapterName = require('./package.json').name.split('.').pop();
-const BrokerInterface = require('iobroker.rtl_433/lib/brokerInterface');
+const BrokerInterface = require('./lib/brokerInterface');
 let   brokerInterface = null;
-const { exit } = require('process');
 
 class rtl_433 extends utils.Adapter {
 
