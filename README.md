@@ -22,6 +22,8 @@ The reason for the 433 in the name is that the adapter requires the utility [rtl
 
 This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON but I have gone through the test cases on the project collecting most of the possible keys.  If a data type is not recognized it will simply be imported as string/value.  The keys of responses supported can easily be extended by modifying lib/datapoints.js.  Setting the logging to debug in the expert mode will show the JSON formatted data from the rtl_433 program.
 
+If you are experiencing trouble with a specific device, please let me know the output for that device using "rtl_433 -F json" so I can figure out what the program is seeing when the device transmits.
+
 Note: The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
 
 ## Changelog
