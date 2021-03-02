@@ -1,19 +1,19 @@
 {
     "common": {
         "name": "rtl_433",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "news": {
-            "1.0.0": {
-                "en": "This has been operating successfully for over a half a year on my local installation with window/door contacts and temperature senders helping me control HVAC. In code I have added error messages to indicate issues with rtl_sdr for clarity. I have cleaned up the code and ioBroker package compliance (except travis won't have rtl_433) and registration.",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
+            "1.0.1": {
+                "en": "Fixed internationalization of admin page labels as well as a few initializattion problems",
+                "de": "Die Internationalisierung von Admin-Seitenbeschriftungen sowie einige Initialisierungsprobleme wurden behoben",
+                "ru": "Исправлена интернационализация меток страниц администратора, а также несколько проблем с инициализацией.",
+                "pt": "Corrigida a internacionalização de rótulos de página de administração, bem como alguns problemas de inicialização",
+                "nl": "Vaste internationalisering van beheerderspaginalabels en enkele initialisatieproblemen",
+                "fr": "Correction de l'internationalisation des étiquettes de page d'administration ainsi que de quelques problèmes d'initialisation",
+                "it": "Risolto il problema con l'internazionalizzazione delle etichette della pagina di amministrazione e alcuni problemi di inizializzazione",
+                "es": "Se corrigió la internacionalización de las etiquetas de la página de administración, así como algunos problemas de inicialización.",
+                "pl": "Naprawiono internacjonalizację etykiet stron administratora, a także kilka problemów z inicjalizacją",
+                "zh-cn": "修复了管理页面标签的国际化以及一些初始化问题"
             }
         },
         "title": "rtl_433",
