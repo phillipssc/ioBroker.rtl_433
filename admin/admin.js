@@ -111,11 +111,8 @@ async function getVersion() {
                 const line = list.stderr.split('\n')[0];
                 const parts = line.match((/rtl_433\ version\ (.*?)\ branch.*/));
                 const version = parts[1];
-                const year = parseInt(version.split('.')[0], 10);
-                const month = parseInt(version.split('.')[1].split('-')[0], 10);
-                const day = parseInt(version.split('.')[1].split('-')[1], 10);
-                const baseVer = new Date(2020, 11, 12, 0, 0, 0, 0);
-                const thisVer = new Date(2000+year, month, day, 0, 0, 0);
+                const thisVer = parseFloat(version.split('-')[0]);
+                const baseVer = 20.02;
                 $('#rtl_433_version').val(parts[1]);
                 if (baseVer > thisVer) $('#rtl_433_version').css('color', 'maroon');
             }
