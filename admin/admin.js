@@ -308,16 +308,6 @@ function establishCmdLineToOptionsRelation() {
                     if (arg === 'protocol') $('#arg_Mp').prop('checked',true);
                 }
             }
-            if (cmdArry[j] === '-d') {
-                if (cmdArry.length > j+1) {
-                    j++;
-                    const arg = cmdArry[j];
-                    if (arg.substring(0,1) === ':') {
-                        // usb device
-                    }
-                    else if (1 == 1) console.log('gettin there');
-                }
-            }
             if (['-g','-t','-f','-H','-p','-s','-X','-Y','-C'].includes(cmdArry[j])) {
                 const cmd = cmdArry[j];
                 if (cmdArry.length > j+1) {
@@ -419,11 +409,9 @@ function updateConfig(settings) {
             const prots = settings.protocols.split(',');
             prots.forEach(prot => checkProtocol(prot));
         }
-        console.log(`Settings frequency: ${settings.frequency}`);
         if (settings.frequency && settings.frequency !== '') {
             $('#arg_f').val(settings.frequency);
         }
-        console.log(`Settings adapterno: ${settings.adapterno}`);
         if (settings.adapterno && settings.adapterno !== '') {
             $('#idxData').val(settings.adapterno);
             $('#deviceType').val('idx');
