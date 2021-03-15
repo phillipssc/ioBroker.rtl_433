@@ -381,7 +381,6 @@ function establishEvents() {
     });
 
     $('#production, #testing').change(e => {
-        debugger;
         const checked = e.target.id;
         $(`#${checked}`).prop('checked', true);
         const unchecked = checked === 'production' ? 'testing' : 'production'
