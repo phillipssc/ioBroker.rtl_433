@@ -57,7 +57,7 @@
         var obj = {};
         $('.value').each(function () {
             var $this = $(this);
-            var id = $key.attr('id');
+            var id = $this.attr('id');
             // the class "value" makes checkboxes work so I use it, but not how it is intended
             if (['rtl_433_cmd','killcheckinterval','lifetime','include'].includes(id)) {
                 if ($this.attr('type') === 'checkbox') {
