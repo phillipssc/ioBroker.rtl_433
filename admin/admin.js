@@ -323,7 +323,6 @@ function establishCmdLineToOptionsRelation() {
     $('.arg').change(() => {forwardCmdLine()});
     $('#rtl_433_cmd').change(() => {reverseCmdline()});
     reverseCmdline();
-    forwardCmdLine();
 }
 
 function establishBoundsChecking() {
@@ -417,8 +416,11 @@ function updateConfig(settings, config) {
             $('#deviceType').val('idx');
         }
         const fBox = $('#arg_C');
-        fBox.val(config.common.tempUnit === '°F' ? 'customary' : 'si').change();
-        if (M) M.FormSelect.init(fBox, {});
+        const systemMeasureUnit = config.common.tempUnit === '°F' ? 'customary' : 'si';
+        if (fBox.val() !== systemMeasureUnit) {
+            fBox.val(config.common.tempUnit === '°F' ? 'customary' : 'si').change();
+            if (M) M.FormSelect.init(fBox, {});
+        }
     }
 }
 
