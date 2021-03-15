@@ -148,6 +148,23 @@ function runProduction(val) {
     }
 }
 
+function checkProtocol(protocol) {
+    let cBox;
+    if (parseInt(protocol, 10) > 0) {
+        cBox = `#include${protocol}`;
+        // if we have positive numbers let's go production
+        $('#production').prop('checked',true);
+        runProduction(true);
+    }
+    else {
+        cBox = `#exclude${Math.abs(protocol)}`;
+    }
+    if (typeof cBox !== undefined) {
+        $(cBox).prop('checked',true);
+        if ($(cBox).parent().parent().parent().hasClass('hiddendiv')) $('#blacklisted').click();
+    } 
+}
+
 function establishCmdLineToOptionsRelation() {
     let fillDirection = null;
 
@@ -272,21 +289,7 @@ function establishCmdLineToOptionsRelation() {
             if (cmdArry[j] === '-R') {
                 if (cmdArry.length > j+1) {
                     j++;
-                    const protocol = cmdArry[j];
-                    let cBox;
-                    if (parseInt(protocol, 10) > 0) {
-                        cBox = `#include${protocol}`;
-                        // if we have positive numbers let's go production
-                        $('#production').prop('checked',true);
-                        runProduction(true);
-                    }
-                    else {
-                        cBox = `#exclude${Math.abs(protocol)}`;
-                    }
-                    if (typeof cBox !== undefined) {
-                        $(cBox).prop('checked',true);
-                        if ($(cBox).parent().parent().parent().hasClass('hiddendiv')) $('#blacklisted').click();
-                    } 
+                    checkProtocol(cmdArry[j]);
                 }
             }
             if (cmdArry[j] === '-G') {
@@ -408,6 +411,24 @@ function establishEvents() {
         }
     });
 
+}
+
+function updateConfig(settings) {
+    if (settings.rtl_433_cmd === 'rtl_433 -F json') {
+        if (settings.protocols && settings.protocols !== '') {
+            const prots = settings.protocols.split(',');
+            prots.forEach(prot => checkProtocol(prot));
+        }
+        console.log(`Settings frequency: ${settings.frequency}`);
+        if (settings.frequency && settings.frequency !== '') {
+            $('#arg_f').val(settings.frequency);
+        }
+        console.log(`Settings adapterno: ${settings.adapterno}`);
+        if (settings.adapterno && settings.adapterno !== '') {
+            $('#idxData').val(settings.adapterno);
+            $('#deviceType').val('idx');
+        }
+    }
 }
 
 async function initializeNonConfigData() {

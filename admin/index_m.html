@@ -43,14 +43,12 @@
                 }
             }
         });
-        console.log(`Settings C_or_F:    ${settings.C_or_F}`);
-        console.log(`Settings protocols: ${settings.protocols}`);
-        console.log(`Settings frequency: ${settings.frequency}`);
-        console.log(`Settings adapterno: ${settings.adapterno}`);
         onChange(false);
         // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
         if (M) M.updateTextFields();
-        // load com port data
+
+        // routine to bring old settings forward
+        updateConfig(settings);
     }
 
     // This will be called by the admin adapter when the user presses the save button
