@@ -309,9 +309,9 @@ function establishCmdLineToOptionsRelation() {
                     j++;
                     const arg = cmdArry[j];
                     const id = `#arg_${cmd.substring(1)}`;
-                    $(id).val(arg).change();
+                    $(id).val(arg);
                     if (M) M.updateTextFields();
-                    if (M && id === 'arg_C') M.FormSelect.init(fBox, {});
+                    if (M && id === '#arg_C') M.FormSelect.init($(id), {});
                 }
             }
         }
@@ -415,7 +415,7 @@ function updateConfig(settings, config) {
         const fBox = $('#arg_C');
         const systemMeasureUnit = config.common.tempUnit === '°F' ? 'customary' : 'si';
         if (fBox.val() !== systemMeasureUnit) {
-            fBox.val(config.common.tempUnit === '°F' ? 'customary' : 'si').change();
+            fBox.val(systemMeasureUnit);
             if (M) M.FormSelect.init(fBox, {});
         }
     }
