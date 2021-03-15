@@ -26,6 +26,17 @@ If you are experiencing trouble with a specific device, please let me know the o
 
 Note: The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
 
+## Troubleshooting
+
+Based on the feedback I have improved the admin pages to be much more comprehensive.  This should help to alleviate the issues I have seen so far. 
+
+* Make sure rtl_433 runs from the command line.
+* Make sure it can run from the command line as the iobroker user.
+* If you contact me, please include the following:
+    * version     - the version from the main admin page.
+    * rtl_433_cmd - the command line from the main admin page.
+    * any pertainant logs
+
 ## Changelog
 
 ### 0.1.2
@@ -36,6 +47,10 @@ Note: The meta-data includes an alive state.  This is only pertinent to devices 
 * This has been oeprating successfully for over a half a year on my local installation. I have decided to move it to 1.0 designation with full ioBroker package compliance and registration
 ### 1.0.1
 * Fixed internationalization of admin page labels as well as a few initializattion problems
+### 1.1.0
+* Improved the administration pages to be both more flexable and informative.
+* Changed how the adapter instanciates the rtl_433 utility for stability purpose.
+* Fixed many errors in the internationalization
 
 ## License
 MIT License

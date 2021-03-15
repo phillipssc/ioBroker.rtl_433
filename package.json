@@ -1,6 +1,6 @@
 {
   "name": "iobroker.rtl_433",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "rtl_433 adapter for ioBroker",
   "author": {
     "name": "Sean Phillips",
@@ -43,6 +43,13 @@
   },
   "main": "main.js",
   "scripts": {
+    "copy": "npm run copy:main; npm run copy:json; npm run copy:admin; npm run copy:lib; npm run copy:fix; npm run copy:upload",
+    "copy:main": "sudo cp -R *.js /opt/iobroker/node_modules/iobroker.rtl_433/",
+    "copy:json": "sudo cp -R *.json /opt/iobroker/node_modules/iobroker.rtl_433/",
+    "copy:admin": "sudo cp -R admin/* /opt/iobroker/node_modules/iobroker.rtl_433/admin/",
+    "copy:lib": "sudo cp -R lib/* /opt/iobroker/node_modules/iobroker.rtl_433/lib/",
+    "copy:fix": "sudo chown -R iobroker:iobroker /opt/iobroker/node_modules/iobroker.rtl_433/",
+    "copy:upload": "iobroker upload rtl_433",
     "test:js": "mocha --opts test/mocha.custom.opts",
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit",
