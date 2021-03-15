@@ -7,14 +7,12 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-let   server      = null;
-const Rtl_433     = require('./lib/rtl_433.js');
 const adapterName = require('./package.json').name.split('.').pop();
+const Rtl_433 = require('./lib/rtl_433.js');
 const BrokerInterface = require('./lib/brokerInterface');
-let   brokerInterface = null;
+const AdminUtility = require('./lib/adminUtility');
 
 class rtl_433 extends utils.Adapter {
-
   /**
    * @param {Partial<utils.AdapterOptions>} [options={}]
    */
@@ -23,10 +21,15 @@ class rtl_433 extends utils.Adapter {
       ...options,
       name: 'rtl_433',
     });
+    this.brokerInterface = null;
+    this.server = null;
+    this.restarts = 0;
     this.on('ready', this.onReady.bind(this));
     this.on('objectChange', this.onObjectChange.bind(this));
     this.on('stateChange', this.onStateChange.bind(this));
     this.on('unload', this.onUnload.bind(this));
+    this.on('message', this.onMessage.bind(this));
+
   }
 
   /**
@@ -34,28 +37,45 @@ class rtl_433 extends utils.Adapter {
    */
   async onReady() {
     // Initialize your adapter here
-    server = new Rtl_433({
-      config: this.config, 
-      log: this.log 
-    });
+    const rtl_433Server = () => {
+      const server = new Rtl_433({
+        config: this.config, 
+        log: this.log 
+      });
 
-    brokerInterface = new BrokerInterface({
+      server.on('connectionChange', (connectState) => {
+        this.setState('info.connection', connectState, true);
+        if (!connectState) {
+          this.log.error('rtl_433 disconnected, reconnecting in 20s ...');
+          if (this.restarts <= 20) {
+            this.timeout = setTimeout(() => {
+              this.server = rtl_433Server();
+              this.restarts += 1;
+            }, 20000);
+          }
+          else {
+            this.log.error('giving up, restart the service when the problem is fixed...');
+          }
+          //this.terminate(2);
+        }
+      });
+  
+      server.on('data', data => {
+        this.log.debug(`${adapterName}:${data}`);
+        this.brokerInterface && this.brokerInterface.handleIncomingObject(data);
+      });
+    }
+    this.server = rtl_433Server();
+    
+    this.brokerInterface = new BrokerInterface({
       adapter: this, 
     });
 
-    server.on('connectionChange', (connectState) => {
-      this.setState('info.connection', connectState, true);
-      if (!connectState) {
-        this.log.error('rtl_433 disconnected');
-        this.terminate(2);
-      }
+    this.adminUtils = new AdminUtility({
+      adapter: this, 
     });
 
-    server.on('data', data => {
-      this.log.debug(`${adapterName}:${data}`);
-      brokerInterface.handleIncomingObject(data);
-    });
-  }
+  };
 
   /**
    * Is called when adapter shuts down - callback has to be called under any circumstances!
@@ -63,8 +83,9 @@ class rtl_433 extends utils.Adapter {
    */
   onUnload(callback) {
     try {
-      brokerInterface.cleanUp();
+      this.brokerInterface && this.brokerInterface.cleanUp();
       this.log.info('cleaned everything up...');
+      this.timeout && clearTimeout(this.timeout);
       callback();
     } catch (e) {
       callback();
@@ -83,7 +104,7 @@ class rtl_433 extends utils.Adapter {
     } else {
       // The object was deleted
       this.log.debug(`object ${id} deleted`);
-      brokerInterface.getDevices();
+      this.brokerInterface && this.brokerInterface.getDevices();
     }
   }
 
@@ -99,6 +120,37 @@ class rtl_433 extends utils.Adapter {
     } else {
       // The state was deleted
       this.log.debug(`state ${id} deleted`);
+    }
+  }
+
+  // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
+  /**
+   * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+   * Using this method requires "common.messagebox" property to be set to true in io-package.json
+   * @param {ioBroker.Message} obj
+   */
+  async onMessage(obj) {
+    const respond = (response) => {
+      if (obj.callback)
+        this.sendTo(obj.from, obj.command, response, obj.callback);
+    };
+    if (typeof obj === 'object') {
+      if (obj.command === 'rtl_433') {
+        try {
+          respond(this.adminUtils ? await this.adminUtils.rtl_433(obj.message) : null);
+        }
+        catch(e) {
+          respond(e);
+        }
+      }
+      if (obj.command === 'listSerial') {
+        try {
+          respond(this.adminUtils ? await this.adminUtils.listSerial() : null);
+        }
+        catch(e) {
+          respond(e);
+        }
+      }
     }
   }
 }
