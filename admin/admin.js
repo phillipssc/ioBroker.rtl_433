@@ -154,6 +154,7 @@ function checkProtocol(protocol) {
         cBox = `#include${protocol}`;
         // if we have positive numbers let's go production
         $('#production').prop('checked',true);
+        $('#testing').prop('checked',false);
         runProduction(true);
     }
     else {
@@ -237,7 +238,7 @@ function establishCmdLineToOptionsRelation() {
             options = [...options, `-M`, 'protocol'];
         }
 
-        $('#rtl_433_cmd').val($('#rtl_433_cmd').val().split(/\s/)[0]+' -F json '+options.join(' '));
+        $('#rtl_433_cmd').val($('#rtl_433_cmd').val().split(/\s/)[0]+' -F json '+options.join(' ')).change();
         fillDirection = null;
     }
 
@@ -424,6 +425,6 @@ async function initializeNonConfigData() {
     await getProtocols();
     await getVersion();
     await establishBoundsChecking();
-    await establishCmdLineToOptionsRelation();
     establishEvents();
+    await establishCmdLineToOptionsRelation();
 }
