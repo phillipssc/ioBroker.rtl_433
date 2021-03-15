@@ -17,14 +17,18 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="words.js"></script>
 
+    <script type="text/javascript" src="admin.js"></script>
     <script type="text/javascript">
-        // This will be called by the admin adapter when the settings page loads
-        function load(settings, onChange) {
-            // example: select elements with id=key and class=value and insert value
-            if (!settings) return;
-            $('.value').each(function () {
-                var $key = $(this);
-                var id = $key.attr('id');
+    // This will be called by the admin adapter when the settings page loads
+    function load(settings, onChange) {
+        initializeNonConfigData();
+        // example: select elements with id=key and class=value and insert value
+        if (!settings) return;
+        $('.value').each(function () {
+            var $key = $(this);
+            var id = $key.attr('id');
+            // the class "value" makes checkboxes work so I use it, but not how it is intended
+            if (['rtl_433_cmd','killcheckinterval','lifetime','include'].includes(id)) {
                 if ($key.attr('type') === 'checkbox') {
                     // do not call onChange direct, because onChange could expect some arguments
                     $key.prop('checked', settings[id])
@@ -37,86 +41,305 @@
                         .on('keyup', () => onChange())
                         ;
                 }
-            });
-            onChange(false);
-            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-            if (M) M.updateTextFields();
-        }
+            }
+        });
+        console.log(`Settings C_or_F:    ${settings.C_or_F}`);
+        console.log(`Settings protocols: ${settings.protocols}`);
+        console.log(`Settings frequency: ${settings.frequency}`);
+        console.log(`Settings adapterno: ${settings.adapterno}`);
+        onChange(false);
+        // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+        if (M) M.updateTextFields();
+        // load com port data
+    }
 
-        // This will be called by the admin adapter when the user presses the save button
-        function save(callback) {
-            // example: select elements with class=value and build settings object
-            var obj = {};
-            $('.value').each(function () {
-                var $this = $(this);
+    // This will be called by the admin adapter when the user presses the save button
+    function save(callback) {
+        // example: select elements with class=value and build settings object
+        var obj = {};
+        $('.value').each(function () {
+            var $this = $(this);
+            var id = $key.attr('id');
+            // the class "value" makes checkboxes work so I use it, but not how it is intended
+            if (['rtl_433_cmd','killcheckinterval','lifetime','include'].includes(id)) {
                 if ($this.attr('type') === 'checkbox') {
                     obj[$this.attr('id')] = $this.prop('checked');
                 } else {
                     obj[$this.attr('id')] = $this.val();
                 }
-            });
-            callback(obj);
-        }
+            }
+        });
+        callback(obj);
+    }
     </script>
-
 </head>
 
 <body>
 
     <div class="m adapter-container">
 
-        <div class="row">
-            <div class="col s12 m4 l2">
-                <img src="rtl_433.png" class="logo">
-            </div>
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#tab-1" class="translate active">rtl_433</a></li>
+                <li class="tab col s2"><a href="#tab-2" class="translate">Protocols</a></li>
+                <li class="tab col s2"><a href="#tab-3" class="translate">Options</a></li>
+                <li class="tab col s2"><a href="#tab-4" class="translate">Sensors</a></li>
+            </ul>
         </div>
 
-        <!-- Put your content here -->
+        <div id="tab-1" class="col s12 page">
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <img src="rtl_433.png" class="logo">
+                </div>
+            </div>
 
-        <!-- For example columns with settings: -->
-        <div class="row">
-            <div class="col s6 input-field">
-                <input type="checkbox" class="value" id="include" />
-                <label for="include" class="translate">include</label>
+            <!-- rtl_433 -->
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="rtl_433">rtl_433</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text"  id="rtl_433_version" readonly />
+                    <label for="rtl_433_version" class="translate">Version</label>
+                    <span class="translate">The version found of the rtl_433 program</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <select id="deviceType" class="arg">
+                        <option value="">&lt;default&gt;</option>
+                        <option value="idx">Index</option>
+                        <option value="usb">USB</option>
+                        <option value="soa">SoapySDR</option>
+                        <option value="tcp">TCP/IP</option>
+                    </select>
+                    <label for="deviceType" class="translate">Device Type</label>
+                    <span class="translate">The type of device rtl_433 will connect to</span>
+                </div>
+                <div id="idxDiv" class="col s6 input-field hiddendiv deviceType">
+                    <input type="text" list="indxs" class="arg" id="idxData" />
+                    <datalist id="indxs">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </datalist>
+                    <label for="idxData" class="translate">Device Index</label>
+                    <span class="translate">The index of the device in how rtl_433 natively sees them</span>
+                </div>
+                <div id="usbDiv" class="col s6 input-field hiddendiv deviceType">
+                    <input type="text" list="ports" class="arg" id="usbData" />
+                    <datalist id="ports"></datalist>
+                    <label for="usbData" class="translate">USB Port</label>
+                    <span class="translate">The specific port for the USB device</span>
+                </div>
+                <div id="soaDiv" class="col s6 input-field hiddendiv deviceType">
+                    <input type="text" class="arg" id="soaData" />
+                    <label for="soaData" class="translate">SoapySDR query</label>
+                    <span class="translate">The specific query for the SoapySDR device</span>
+                </div>
+                <div id="tcpDiv" class="col s6 input-field hiddendiv deviceType">
+                    <input type="text" class="arg" id="tcpData" />
+                    <label for="tcpData" class="translate">TCP/IP address</label>
+                    <span class="translate">The address of the remote device</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="value" id="rtl_433_cmd" />
+                    <label for="rtl_433_cmd" class="translate">Command line</label>
+                    <span class="translate">This is how rtl_433 will be invoked (changing values in the protocols and options tabs will change this value)</span>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col s6 input-field">
-                <input type="text" class="value" id="protocols" />
-                <label for="protocols" class="translate">protocols</label>
+        <div id="tab-2" class="col s12 page">
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <img src="rtl_433.png" class="logo">
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col s6 input-field">
-                <input type="text" class="value" id="C_or_F" />
-                <label for="C_or_F" class="translate">C or F</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s6 input-field">
-                <input type="text" class="value" id="frequency" />
-                <label for="frequency" class="translate">frequency</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s6 input-field">
-                <input type="text" class="value" id="adapterno" />
-                <label for="adapterno" class="translate">adapterno</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s6 input-field">
-                <input type="text" class="value" id="killcheckinterval" />
-                <label for="killcheckinterval" class="translate">kill check interval</label>
-            </div>
-            <div class="col s6 input-field">
-                <input type="text" class="value" id="lifetime" />
-                <label for="lifetime" class="translate">device timeout</label>
-            </div>
-        </div>
 
+            <!-- Protocols -->
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="Protocols">Protocols</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <!-- <select id="protocolType">
+                        <option value="testing">testing</option>
+                        <option value="production">production</option>
+                    </select> -->
+                    <input type="checkbox" class="value arg" id="testing" checked />
+                    <label for="testing" class="translate">Testing</label>
+                    <input type="checkbox" class="value arg" id="production" />
+                    <label for="production" class="translate">Production</label>
+                    <br><span class="translate">Testing returns all protocols, production returns only the protocols you include</span>
+                </div>
+                <div class="col s6 input-field">
+                    <input type="checkbox" class="value arg" id="blacklisted" />
+                    <label for="blacklisted" class="translate" data-lang="Include Blacklisted">Include Blacklisted</label>
+                    <br><span class="translate">Make rtl_433 decode blacklisted or unstable protocols</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="white-space: nowrap" class="translate" data-lang="Include">Include</th>
+                                <th style="white-space: nowrap" class="translate" data-lang="Exclude">Exclude</th>
+                                <th style="white-space: nowrap" class="translate" data-lang="ID">ID</th>
+                                <th style="white-space: nowrap" class="translate" data-lang="Protocol">Protocol</th>
+                            </tr>
+                        </thead>
+                        <tbody id="protocolsList">
+                    </table>            
+                </div>
+            </div>
+        </div>
+        <div id="tab-3" class="col s12 page">
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <img src="rtl_433.png" class="logo">
+                </div>
+            </div>
+
+            <!-- Options -->
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="Options">Options</h6>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="arg" id="arg_g" />
+                    <label for="arg_g" class="translate">Gain</label>
+                    <span class="translate">(default: auto)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="arg" id="arg_t" />
+                    <label for="arg_t" class="translate">settings</label>
+                    <span class="translate">apply a list of keyword=value settings for SoapySDR devices</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="arg" id="arg_f" />
+                    <label for="arg_f" class="translate">Frequency</label>
+                    <span class="translate">Receive frequency(s) (default: 433920000 Hz)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="arg" id="arg_H" />
+                    <label for="arg_H" class="translate">Seconds</label>
+                    <span class="translate">Hop interval for polling of multiple frequencies (default: 600 seconds)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="arg" id="arg_p" />
+                    <label for="arg_p" class="translate">PPM Error</label>
+                    <span class="translate">Correct rtl-sdr tuner frequency offset error (default: 0)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="arg" id="arg_s" />
+                    <label for="arg_s" class="translate">Sample Rate</label>
+                    <span class="translate">Set sample rate (default: 250000 Hz)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="arg" id="arg_X" />
+                    <label for="arg_X" class="translate">spec</label>
+                    <span class="translate">Add a general purpose decoder (prepend -R 0 to disable all decoders)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" list="argY" class="arg" id="arg_Y" />
+                    <datalist id="argY">
+                        <option value="auto">auto</option>
+                        <option value="classic">classic</option>
+                        <option value="minmax">minmax</option>
+                    </datalist>
+                    <label for="arg_Y" class="translate">level</label>
+                    <span class="translate">Manual detection level used to determine pulses (-1.0 to -30.0) (0=auto)</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <select type="text" class="arg" id="arg_C">
+                        <option value="native">native</option>
+                        <option value="si">si</option>
+                        <option value="customary">customary</option>
+                    </select>
+                    <label for="arg_C" class="translate">Unit of Measure</label>
+                    <span class="translate">Determines the unit of measure data comes back in, automatically set by your system.config</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="checkbox" class="value arg" id="arg_Ml" />
+                    <label for="arg_Ml" class="translate">Include Signal Data</label>
+                    <br><span class="translate">Create fields in the sensor object for signal data</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="checkbox" class="value arg" id="arg_Mp" />
+                    <label for="arg_Mp" class="translate">Include Protocol Data</label>
+                    <br><span class="translate">Create fields in the sensor object for protocol data</span>
+                </div>
+            </div>            
+        </div>
+        <div id="tab-4" class="col s12 page">
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <img src="rtl_433.png" class="logo">
+                </div>
+            </div>
+
+            <!-- Sensors -->
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="Sensors">Sensors</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="checkbox" class="value" id="include" />
+                    <label for="include" class="translate">include</label>
+                    <br><span class="translate">Create objects for newly detected sensors</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="value" id="killcheckinterval" />
+                    <label for="killcheckinterval" class="translate">kill check interval</label>
+                    <span class="translate">Period of time between scans to determine if the sensor is still alive</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 input-field">
+                    <input type="text" class="value" id="lifetime" />
+                    <label for="lifetime" class="translate">device timeout</label>
+                    <span class="translate">Time elapsed without an update to declare sensor dead</span>
+                </div>
+            </div>
+        </div>
     </div>
-
 </body>
-
 </html>
