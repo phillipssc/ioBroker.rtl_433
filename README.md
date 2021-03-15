@@ -51,6 +51,8 @@ Based on the feedback I have improved the admin pages to be much more comprehens
 * Improved the administration pages to be both more flexable and informative.
 * Changed how the adapter instanciates the rtl_433 utility for stability purpose.
 * Fixed many errors in the internationalization
+### 1.1.1
+* a few teaks for converting the old configuration
 
 ## License
 MIT License
