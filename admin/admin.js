@@ -125,14 +125,11 @@ async function getVersion() {
     });
 }
 
-async function getStandard() {
+async function getSystemConfig() {
     return new Promise((resolve,reject) => {
         socket.emit('getObject', 'system.config', function (err, res) {
-            if (err) throw err;
-            const fBox = $('#arg_C');
-            fBox.val(res.common.tempUnit === '°F' ? 'customary' : 'si');
-            if (M) M.FormSelect.init(fBox, {});
-            resolve();
+            if (err) reject(err);
+            resolve(res);
         });
     });
 }
@@ -161,7 +158,7 @@ function checkProtocol(protocol) {
         cBox = `#exclude${Math.abs(protocol)}`;
     }
     if (typeof cBox !== undefined) {
-        $(cBox).prop('checked',true);
+        $(cBox).prop('checked',true).change();
         if ($(cBox).parent().parent().parent().hasClass('hiddendiv')) $('#blacklisted').click();
     } 
 }
@@ -315,7 +312,7 @@ function establishCmdLineToOptionsRelation() {
                     j++;
                     const arg = cmdArry[j];
                     const id = `#arg_${cmd.substring(1)}`;
-                    $(id).val(arg);
+                    $(id).val(arg).change();
                     if (M) M.updateTextFields();
                     if (M && id === 'arg_C') M.FormSelect.init(fBox, {});
                 }
@@ -326,6 +323,7 @@ function establishCmdLineToOptionsRelation() {
     $('.arg').change(() => {forwardCmdLine()});
     $('#rtl_433_cmd').change(() => {reverseCmdline()});
     reverseCmdline();
+    forwardCmdLine();
 }
 
 function establishBoundsChecking() {
@@ -403,11 +401,13 @@ function establishEvents() {
 
 }
 
-function updateConfig(settings) {
+function updateConfig(settings, config) {
     if (settings.rtl_433_cmd === 'rtl_433 -F json') {
         if (settings.protocols && settings.protocols !== '') {
-            const prots = settings.protocols.split(',');
-            prots.forEach(prot => checkProtocol(prot));
+            const ports = settings.protocols.split(',');
+            ports.forEach((port) => {
+                checkProtocol(port);
+            });
         }
         if (settings.frequency && settings.frequency !== '') {
             $('#arg_f').val(settings.frequency);
@@ -416,15 +416,19 @@ function updateConfig(settings) {
             $('#idxData').val(settings.adapterno);
             $('#deviceType').val('idx');
         }
+        const fBox = $('#arg_C');
+        fBox.val(config.common.tempUnit === '°F' ? 'customary' : 'si').change();
+        if (M) M.FormSelect.init(fBox, {});
     }
 }
 
-async function initializeNonConfigData() {
-    await getStandard();
+async function initializeNonConfigData(settings) {
+    const config = await getSystemConfig();
     await getComPorts();
     await getProtocols();
     await getVersion();
     await establishBoundsChecking();
     establishEvents();
     await establishCmdLineToOptionsRelation();
+    updateConfig(settings,config);
 }

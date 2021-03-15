@@ -21,7 +21,7 @@
     <script type="text/javascript">
     // This will be called by the admin adapter when the settings page loads
     function load(settings, onChange) {
-        initializeNonConfigData();
+        initializeNonConfigData(settings);
         // example: select elements with id=key and class=value and insert value
         if (!settings) return;
         $('.value').each(function () {
@@ -48,7 +48,7 @@
         if (M) M.updateTextFields();
 
         // routine to bring old settings forward
-        updateConfig(settings);
+        // updateConfig(settings);
     }
 
     // This will be called by the admin adapter when the user presses the save button
