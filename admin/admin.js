@@ -266,6 +266,7 @@ function establishCmdLineToOptionsRelation() {
                         serviced = true;
                         $('#deviceType').val('usb');
                         $('#usbData').val(parts[1]);
+                        if (M) M.FormSelect.init($('#usbData'), {});
                     }
                     // device index
                     parts = device.match(/(\d*)/);
@@ -273,12 +274,13 @@ function establishCmdLineToOptionsRelation() {
                         serviced = true;
                         $('#deviceType').val('idx');
                         $('#idxData').val(parts[1]);
+                        if (M) M.FormSelect.init($('#idxData'), {});
                     }
                     if (!serviced && device !== '') {
                         $('#deviceType').val('soa');
-                        $('#idxData').val(device);
+                        $('#soaData').val(device);
                     }
-
+                    if (M) M.FormSelect.init($('#deviceType'), {});
                 }
             }
             if (cmdArry[j] === '-R') {
