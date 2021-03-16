@@ -11,6 +11,9 @@ const adapterName = require('./package.json').name.split('.').pop();
 const Rtl_433 = require('./lib/rtl_433.js');
 const BrokerInterface = require('./lib/brokerInterface');
 const AdminUtility = require('./lib/adminUtility');
+const MAX_RESTART_DURATION = 10*60; // 10 minutes
+const BASE_RESTART_DURATION = 20; // 20 seconds 
+const INC_RESTART_DURATION = 20; // 20 seconds 
 
 class rtl_433 extends utils.Adapter {
   /**
@@ -23,7 +26,7 @@ class rtl_433 extends utils.Adapter {
     });
     this.brokerInterface = null;
     this.server = null;
-    this.restarts = 0;
+    this.restartDuration = 20;
     this.on('ready', this.onReady.bind(this));
     this.on('objectChange', this.onObjectChange.bind(this));
     this.on('stateChange', this.onStateChange.bind(this));
@@ -43,21 +46,25 @@ class rtl_433 extends utils.Adapter {
         log: this.log 
       });
 
+      let connected = false;
       server.on('connectionChange', (connectState) => {
         this.setState('info.connection', connectState, true);
-        if (!connectState) {
-          this.log.error('rtl_433 disconnected, reconnecting in 20s ...');
-          if (this.restarts <= 20) {
-            this.timeout = setTimeout(() => {
-              this.server = rtl_433Server();
-              this.restarts += 1;
-            }, 20000);
-          }
-          else {
-            this.log.error('giving up, restart the service when the problem is fixed...');
-          }
-          //this.terminate(2);
+        if (!connectState && !connected) {
+          this.log.error(`rtl_433 disconnected, reconnecting in ${this.restartDuration}s ...`);
+          this.timeout = setTimeout(() => {
+            this.server = rtl_433Server();
+            if (this.restartDuration < MAX_RESTART_DURATION) {
+              this.restartDuration += INC_RESTART_DURATION;
+            }
+            else {
+              this.restartDuration = MAX_RESTART_DURATION;
+            }
+          }, this.restartDuration*1000);
         }
+        else {
+          this.restartDuration = BASE_RESTART_DURATION;
+        }
+        connected = connectState;
       });
   
       server.on('data', data => {
