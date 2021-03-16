@@ -252,32 +252,30 @@ function establishCmdLineToOptionsRelation() {
                 if (cmdArry.length > j+1) {
                     j++;
                     const device = cmdArry[j];
-                    const serviced = false;
+                    let serviced = false;
                     // tcp
                     let parts = device.match(/rtl_tcp:\/\/(.*)/);
                     if (parts) {
                         serviced = true;
-                        $('#deviceType').val('tcp');
+                        $('#deviceType').val('tcp').change();
                         $('#tcpData').val(parts[1]);
                     }
                     // usb port
                     parts = device.match(/:(\/dev\/.*)/);
                     if (parts) {
                         serviced = true;
-                        $('#deviceType').val('usb');
+                        $('#deviceType').val('usb').change();
                         $('#usbData').val(parts[1]);
-                        if (M) M.FormSelect.init($('#usbData'), {});
                     }
                     // device index
-                    parts = device.match(/(\d*)/);
+                    parts = device.match(/^(\d+)$/);
                     if (parts) {
                         serviced = true;
-                        $('#deviceType').val('idx');
+                        $('#deviceType').val('idx').change();
                         $('#idxData').val(parts[1]);
-                        if (M) M.FormSelect.init($('#idxData'), {});
                     }
                     if (!serviced && device !== '') {
-                        $('#deviceType').val('soa');
+                        $('#deviceType').val('soa').change();
                         $('#soaData').val(device);
                     }
                     if (M) M.FormSelect.init($('#deviceType'), {});
@@ -312,11 +310,11 @@ function establishCmdLineToOptionsRelation() {
                     const arg = cmdArry[j];
                     const id = `#arg_${cmd.substring(1)}`;
                     $(id).val(arg);
-                    if (M) M.updateTextFields();
                     if (M && id === '#arg_C') M.FormSelect.init($(id), {});
                 }
             }
         }
+        if (M) M.updateTextFields();
         fillDirection = null;
     }
     $('.arg').change(() => {forwardCmdLine()});
