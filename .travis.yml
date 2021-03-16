@@ -7,9 +7,9 @@ language: node_js
 node_js:
   - '10'
   - '12'
-
+  - '14'
 env:
-  - CXX=g++-4.8
+  - DEBUG=true
 addons:
   apt:
     sources:
@@ -18,7 +18,7 @@ addons:
       - g++-6
 
 before_install:
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then CC=gcc-6; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CC=clang++; export CXX=clang++; export CXXFLAGS=-stdlib=libc++; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then CC=g++-6; fi'
 before_script:
   - export NPMVERSION=$(echo "$($(which npm) -v)"|cut -c1)

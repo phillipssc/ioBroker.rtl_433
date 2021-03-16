@@ -53,6 +53,8 @@ Based on the feedback I have improved the admin pages to be much more comprehens
 * Fixed many errors in the internationalization
 ### 1.1.1
 * a few teaks for converting the old configuration
+### 1.1.2
+* a few more fixes
 
 ## License
 MIT License
