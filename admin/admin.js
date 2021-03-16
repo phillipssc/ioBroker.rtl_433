@@ -329,7 +329,7 @@ function establishBoundsChecking() {
         return expression.test(address.value);
     }
     $("#tcpData").keyup(function() {
-        if (validateIPAddress(this)) {
+        if (this.value === '' || validateIPAddress(this)) {
             $("#tcpData").removeClass("invalid");
         }
         else {
@@ -344,7 +344,7 @@ function establishBoundsChecking() {
     }
     ['#idxData', '#arg_H', '#arg_p', '#arg_Y', '#killcheckinterval', '#lifetime'].forEach(id => {
         $(id).keyup(function() {
-            if (validateIteger(this)) {
+            if (this.value === '' || validateIteger(this)) {
                 $(id).removeClass("invalid");
             }
             else {
@@ -359,7 +359,7 @@ function establishBoundsChecking() {
     }
     ['#arg_f', '#arg_s'].forEach(id => {
         $(id).keyup(function() {
-            if (validateItegerPlus(this)) {
+            if (this.value === '' || validateItegerPlus(this)) {
                 $(id).removeClass("invalid");
             }
             else {
