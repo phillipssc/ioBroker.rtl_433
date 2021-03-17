@@ -1,4 +1,4 @@
-![Logo](admin/rtl_433.png)
+"![Logo](admin/rtl_433.png)
 # ioBroker.rtl_433
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.rtl_433.svg)](https://www.npmjs.com/package/iobroker.rtl_433)
@@ -22,9 +22,11 @@ The reason for the 433 in the name is that the adapter requires the utility [rtl
 
 This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON but I have gone through the test cases on the project collecting most of the possible keys.  If a data type is not recognized it will simply be imported as string/value.  The keys of responses supported can easily be extended by modifying lib/datapoints.js.  Setting the logging to debug in the expert mode will show the JSON formatted data from the rtl_433 program.
 
-If you are experiencing trouble with a specific device, please let me know the output for that device using "rtl_433 -F json" so I can figure out what the program is seeing when the device transmits.
-
 Note: The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
+
+## Remote sensor
+
+You can read a remote sensor!  To do so you would only need to install rtl-sdr on the remote computer.  Using a Raspberry Pi as the remote you would do a fresh install, update it, then run 'sudo apt-get install rtl-sdr'. After it is installed you would connect the rtl-sdr adapter on it then run 'rtl_tcp -a [ip address of the Pi]'. Then in the setup pages of the iobroker.rtl_433 adapter put in the device type of TCP/IP and enter the ip address of the Pi.  When the adapter restarts it will connect to the remote sensor to get the data.
 
 ## Troubleshooting
 
@@ -36,6 +38,8 @@ Based on the feedback I have improved the admin pages to be much more comprehens
     * version     - the version from the main admin page.
     * rtl_433_cmd - the command line from the main admin page.
     * any pertainant logs
+
+If you are experiencing trouble with a specific device, please let me know the output for that device using 'rtl_433 -F json' so I can figure out what the program is doing when the device transmits.
 
 ## Changelog
 
