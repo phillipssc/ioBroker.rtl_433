@@ -1,17 +1,16 @@
 async function getComPorts() {
     return new Promise((resolve,reject) => {
-        let timeout = setTimeout(function () {
-            _getComPorts();
-        }, 2000);
-
         const _getComPorts = () => {
+            let timeout = setTimeout(function () {
+                _getComPorts();
+            }, 2000);
             sendTo(null, 'listSerial', null, function (list) {
                 if (timeout) {
                     clearTimeout(timeout);
                     timeout = null;
                 }
                 if (!list || !list.length) {
-                    setTimeout(function () {
+                    timeout = setTimeout(function () {
                         _getComPorts();
                     }, 1000);
                     return;
@@ -36,18 +35,17 @@ async function getComPorts() {
 
 async function getProtocols() {
     return new Promise((resolve, reject) => {
-        let timeout = setTimeout(function () {
-            _getProtocols();
-        }, 2000);
-
         const _getProtocols = () => {
+            let timeout = setTimeout(function () {
+                _getProtocols();
+            }, 2000);
             sendTo(null, 'rtl_433', '-R', (list) => {
                 if (timeout) {
                     clearTimeout(timeout);
                     timeout = null;
                 }
                 if (!list.stderr || !list.stderr.length) {
-                    setTimeout(function () {
+                    timeout = setTimeout(function () {
                         _getProtocols();
                     }, 1000);
                     return;
@@ -88,11 +86,10 @@ async function getProtocols() {
 
 async function getVersion() {
     return new Promise((resolve,reject) => {
-        let timeout = setTimeout(function () {
-            _getVersion();
-        }, 2000);
-    
         const _getVersion = () => { 
+            let timeout = setTimeout(function () {
+                _getVersion();
+            }, 2000);
             sendTo(null, 'rtl_433', '-V', (list) => {
                 if (timeout) {
                     clearTimeout(timeout);
@@ -100,7 +97,7 @@ async function getVersion() {
                 }
                 if (!list.error) {
                     if (!list.stderr || !list.stderr.length) {
-                        setTimeout(function () {
+                        timeout = setTimeout(function () {
                             _getVersion();
                         }, 1000);
                         return;
@@ -111,19 +108,22 @@ async function getVersion() {
                     if (list.error.code === 126) $('#rtl_433_version').val(_('Could not execute rtl_433, permission errors?'));
                     else if (list.error.code === 127) $('#rtl_433_version').val(_('Could not find rtl_433 executable'));
                     else  $('#rtl_433_version').val(_('General error executing rtl_433'));
+                    if (M) M.updateTextFields();
                 }
                 else {
-                    $('#rtl_433_version').css('color', 'unset');
-                    let text = '';
-                    const line = list.stderr.split('\n')[0];
-                    const parts = line.match((/rtl_433\ version\ (.*?)\ branch.*/));
-                    const version = parts[1];
-                    const thisVer = parseFloat(version.split('-')[0]);
-                    const baseVer = 20.02;
-                    $('#rtl_433_version').val(parts[1]);
-                    if (baseVer > thisVer) $('#rtl_433_version').css('color', 'maroon');
+                    sendTo(null, 'adapterVersion', null, (ver) => {
+                        $('#rtl_433_version').css('color', 'unset');
+                        let text = '';
+                        const line = list.stderr.split('\n')[0];
+                        const parts = line.match((/rtl_433\ version\ (.*?)\ branch.*/));
+                        const version = parts[1];
+                        const thisVer = parseFloat(version.split('-')[0]);
+                        const baseVer = 20.02;
+                        $('#rtl_433_version').val(`adapter: ${ver}   rtl_433: ${parts[1]}`);
+                        if (baseVer > thisVer) $('#rtl_433_version').css('color', 'maroon');
+                        if (M) M.updateTextFields();
+                    });
                 }
-                if (M) M.updateTextFields();
                 resolve();
             });
         }
@@ -225,11 +225,16 @@ function establishCmdLineToOptionsRelation() {
             });
         }
         // general options
-        ['g','t','f','H','p','s','X','Y','C'].forEach(letter => {
+        ['g','t','H','p','s','X','Y','C'].forEach(letter => {
             const arg = $(`#arg_${letter}`).val();
             if (arg !== '') {
                 options = [...options, `-${letter}`, arg];
             }
+        });
+        // frequency 1 or more
+        const addF_A = $('#arg_f').val().split(/[,;\s]/);
+        addF_A.forEach((val) => {
+            options = [...options, '-f', val];
         });
         // additional data options
         const addPD = $('#arg_Ml').prop('checked');
@@ -312,7 +317,7 @@ function establishCmdLineToOptionsRelation() {
                     if (arg === 'protocol') $('#arg_Mp').prop('checked',true);
                 }
             }
-            if (['-g','-t','-f','-H','-p','-s','-X','-Y','-C'].includes(cmdArry[j])) {
+            if (['-g','-t','-H','-p','-s','-X','-Y','-C'].includes(cmdArry[j])) {
                 const cmd = cmdArry[j];
                 if (cmdArry.length > j+1) {
                     j++;
@@ -320,6 +325,14 @@ function establishCmdLineToOptionsRelation() {
                     const id = `#arg_${cmd.substring(1)}`;
                     $(id).val(arg);
                     if (M && id === '#arg_C') M.FormSelect.init($(id), {});
+                }
+            }
+            if (cmdArry[j] === '-f') {
+                const currVal = $('#arg_f').val();
+                if (cmdArry.length > j+1) {
+                    j++;
+                    const arg = currVal.length > 0 ? `${currVal} ${cmdArry[j]}` : cmdArry[j];
+                    $('#arg_f').val(arg);
                 }
             }
         }
@@ -363,7 +376,7 @@ function establishBoundsChecking() {
     });
     // integer plus verification
     function validateItegerPlus(idx) {
-        var expression = /^\d+M{0,1}k{0,1}$/;
+        var expression = /^\d+M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}$/;
         return expression.test(idx.value);
     }
     ['#arg_f', '#arg_s'].forEach(id => {
