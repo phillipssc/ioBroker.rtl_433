@@ -158,6 +158,14 @@ class rtl_433 extends utils.Adapter {
           respond(e);
         }
       }
+      if (obj.command === 'adapterVersion') {
+        try {
+          respond(this.adminUtils ? this.adminUtils.adapterVersion() : null);
+        }
+        catch(e) {
+          respond(e);
+        }
+      }
     }
   }
 }
