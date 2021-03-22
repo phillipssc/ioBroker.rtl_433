@@ -1,124 +1,133 @@
 async function getComPorts() {
     return new Promise((resolve,reject) => {
         let timeout = setTimeout(function () {
-            getComPorts();
+            _getComPorts();
         }, 2000);
 
-        sendTo(null, 'listSerial', null, function (list) {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
-            if (!list || !list.length) {
-                setTimeout(function () {
-                    getComPorts();
-                }, 1000);
-                return;
-            }
-            var text = '';
-            for (var j = 0; j < list.length; j++) {
-                if (list[j].comName === 'Not available') {
-                    text += '<option value="">' + _('Not available') + '</option>';
-                    $('#usb').prop('disabled', true);
-                    break;
-                } else {
-                    text += '<option value="' + list[j].comName + '" ' + '>' + list[j].comName + '</option>';
+        const _getComPorts = () => {
+            sendTo(null, 'listSerial', null, function (list) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
                 }
-            }
-            $('#ports').html(text);
-            resolve();
-        });
-    })
+                if (!list || !list.length) {
+                    setTimeout(function () {
+                        _getComPorts();
+                    }, 1000);
+                    return;
+                }
+                var text = '';
+                for (var j = 0; j < list.length; j++) {
+                    if (list[j].comName === 'Not available') {
+                        text += '<option value="">' + _('Not available') + '</option>';
+                        $('#usb').prop('disabled', true);
+                        break;
+                    } else {
+                        text += '<option value="' + list[j].comName + '" ' + '>' + list[j].comName + '</option>';
+                    }
+                }
+                $('#ports').html(text);
+                resolve();
+            });
+        }
+        _getComPorts();
+    });
 }
 
 async function getProtocols() {
     return new Promise((resolve, reject) => {
         let timeout = setTimeout(function () {
-            getProtocols();
+            _getProtocols();
         }, 2000);
 
-        sendTo(null, 'rtl_433', '-R', (list) => {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
-            if (!list.stderr || !list.stderr.length) {
-                setTimeout(function () {
-                    getProtocols();
-                }, 1000);
-                return;
-            }
-            $('#protocolsList').empty();
-            const lines = list.stderr.split('\n').filter((line) => line.search((/\s*\[\d*\]\*?\s{1,2}.*/))>=0);
-            for (var j = 0; j < lines.length; j++) {
-                const parts = lines[j].match((/\s*\[(\d*)\](\*?)\s{1,2}(.*)/));
-                const hidden = parts[2] === '*' ? ' hiddendiv blacklisted' : '';
-                const color = parts[2] === '*' ? ' color: maroon;' : '';
-                let text = `<tr class="device${hidden}" data-id="${parts[1]}">`;
-                text += '<td style="white-space: nowrap;">';
-                text += `<label for="include${parts[1]}" class="translate">`;
-                text += `<input type="checkbox" class="pIncludes value arg" id="include${parts[1]}" disabled />`;
-                text += '<span></span>';
-                text += '</label>';
-                text += '</td>';
-                text += '<td style="white-space: nowrap;">';
-                text += `<label for="exclude${parts[1]}" class="translate">`;
-                text += `<input type="checkbox" class="pExcludes value arg" id="exclude${parts[1]}" />`;
-                text += '<span></span>';
-                text += '</label>';
-                text += '</td>';
-                text += `<td style="white-space: nowrap;${color}">${parts[1]}</td>`;
-                text += `<td style="white-space: nowrap;${color}">${parts[3]}</td>`;
-                text += '</tr>';
+        const _getProtocols = () => {
+            sendTo(null, 'rtl_433', '-R', (list) => {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                }
+                if (!list.stderr || !list.stderr.length) {
+                    setTimeout(function () {
+                        _getProtocols();
+                    }, 1000);
+                    return;
+                }
+                $('#protocolsList').empty();
+                const lines = list.stderr.split('\n').filter((line) => line.search((/\s*\[\d*\]\*?\s{1,2}.*/))>=0);
+                for (var j = 0; j < lines.length; j++) {
+                    const parts = lines[j].match((/\s*\[(\d*)\](\*?)\s{1,2}(.*)/));
+                    const hidden = parts[2] === '*' ? ' hiddendiv blacklisted' : '';
+                    const color = parts[2] === '*' ? ' color: maroon;' : '';
+                    let text = `<tr class="device${hidden}" data-id="${parts[1]}">`;
+                    text += '<td style="white-space: nowrap;">';
+                    text += `<label for="include${parts[1]}" class="translate">`;
+                    text += `<input type="checkbox" class="pIncludes value arg" id="include${parts[1]}" disabled />`;
+                    text += '<span></span>';
+                    text += '</label>';
+                    text += '</td>';
+                    text += '<td style="white-space: nowrap;">';
+                    text += `<label for="exclude${parts[1]}" class="translate">`;
+                    text += `<input type="checkbox" class="pExcludes value arg" id="exclude${parts[1]}" />`;
+                    text += '<span></span>';
+                    text += '</label>';
+                    text += '</td>';
+                    text += `<td style="white-space: nowrap;${color}">${parts[1]}</td>`;
+                    text += `<td style="white-space: nowrap;${color}">${parts[3]}</td>`;
+                    text += '</tr>';
 
-                $('#protocolsList').append($(text));
-                const cBox = $(`#protocol${parts[1]}`);
-            }
-            if (M) M.updateTextFields();
-            resolve();
-        });
+                    $('#protocolsList').append($(text));
+                    const cBox = $(`#protocol${parts[1]}`);
+                }
+                if (M) M.updateTextFields();
+                resolve();
+            });
+        }
+        _getProtocols();
     });
 }
 
 async function getVersion() {
     return new Promise((resolve,reject) => {
         let timeout = setTimeout(function () {
-            getVersion();
+            _getVersion();
         }, 2000);
     
-        sendTo(null, 'rtl_433', '-V', (list) => {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
-            if (!list.error) {
-                if (!list.stderr || !list.stderr.length) {
-                    setTimeout(function () {
-                        getVersion();
-                    }, 1000);
-                    return;
+        const _getVersion = () => { 
+            sendTo(null, 'rtl_433', '-V', (list) => {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
                 }
-            }
-            if (list.error) {
-                $('#rtl_433_version').css('color', 'maroon');
-                if (list.error.code === 126) $('#rtl_433_version').val(_('Could not execute rtl_433, permission errors?'));
-                else if (list.error.code === 127) $('#rtl_433_version').val(_('Could not find rtl_433 executable'));
-                else  $('#rtl_433_version').val(_('General error executing rtl_433'));
-            }
-            else {
-                $('#rtl_433_version').css('color', 'unset');
-                let text = '';
-                const line = list.stderr.split('\n')[0];
-                const parts = line.match((/rtl_433\ version\ (.*?)\ branch.*/));
-                const version = parts[1];
-                const thisVer = parseFloat(version.split('-')[0]);
-                const baseVer = 20.02;
-                $('#rtl_433_version').val(parts[1]);
-                if (baseVer > thisVer) $('#rtl_433_version').css('color', 'maroon');
-            }
-            if (M) M.updateTextFields();
-            resolve();
-        });
+                if (!list.error) {
+                    if (!list.stderr || !list.stderr.length) {
+                        setTimeout(function () {
+                            _getVersion();
+                        }, 1000);
+                        return;
+                    }
+                }
+                if (list.error) {
+                    $('#rtl_433_version').css('color', 'maroon');
+                    if (list.error.code === 126) $('#rtl_433_version').val(_('Could not execute rtl_433, permission errors?'));
+                    else if (list.error.code === 127) $('#rtl_433_version').val(_('Could not find rtl_433 executable'));
+                    else  $('#rtl_433_version').val(_('General error executing rtl_433'));
+                }
+                else {
+                    $('#rtl_433_version').css('color', 'unset');
+                    let text = '';
+                    const line = list.stderr.split('\n')[0];
+                    const parts = line.match((/rtl_433\ version\ (.*?)\ branch.*/));
+                    const version = parts[1];
+                    const thisVer = parseFloat(version.split('-')[0]);
+                    const baseVer = 20.02;
+                    $('#rtl_433_version').val(parts[1]);
+                    if (baseVer > thisVer) $('#rtl_433_version').css('color', 'maroon');
+                }
+                if (M) M.updateTextFields();
+                resolve();
+            });
+        }
+        _getVersion();
     });
 }
 
