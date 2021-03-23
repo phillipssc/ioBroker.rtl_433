@@ -215,12 +215,12 @@ function establishCmdLineToOptionsRelation() {
         }
         // protocols
         if ($('#production').prop('checked')) {
-            [...$('.pIncludes:checkbox:checked')].forEach((item) => {
+            [...$('.pIncludes:checkbox:checked:visible')].forEach((item) => {
                 options = [...options, '-R', item.id.replace('include','')];
             });
         }
         else {
-            [...$('.pExcludes:checkbox:checked')].forEach((item) => {
+            [...$('.pExcludes:checkbox:checked:visible')].forEach((item) => {
                 options = [...options, '-R', '-'+item.id.replace('exclude','')];
             });
         }
