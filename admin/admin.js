@@ -234,7 +234,9 @@ function establishCmdLineToOptionsRelation() {
         // frequency 1 or more
         const addF_A = $('#arg_f').val().split(/[,;\s]/);
         addF_A.forEach((val) => {
-            options = [...options, '-f', val];
+            if(val !== '') {
+                options = [...options, '-f', val];
+            }
         });
         // additional data options
         const addPD = $('#arg_Ml').prop('checked');
