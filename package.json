@@ -50,11 +50,7 @@
     "copy:lib": "sudo cp -R lib/* /opt/iobroker/node_modules/iobroker.rtl_433/lib/",
     "copy:fix": "sudo chown -R iobroker:iobroker /opt/iobroker/node_modules/iobroker.rtl_433/",
     "copy:upload": "iobroker upload rtl_433",
-    "test:js": "mocha --opts test/mocha.custom.opts",
-    "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
+    "test": "mocha --config=test/.mocharc.json --node-env=test --exit",
     "lint": "eslint"
   },
   "bugs": {
