@@ -81,7 +81,7 @@ class rtl_433 extends utils.Adapter {
     this.adminUtils = new AdminUtility({
       adapter: this, 
     });
-
+    await this.subscribeObjectsAsync("*");
   };
 
   /**
@@ -110,8 +110,11 @@ class rtl_433 extends utils.Adapter {
       this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
     } else {
       // The object was deleted
-      this.log.debug(`object ${id} deleted`);
-      this.brokerInterface && this.brokerInterface.getDevices();
+      const regex = /^rtl_433\.\d+\.[\w-]+-\d+$/;
+      if (regex.test(id)) {
+        this.log.debug(`object ${id} deleted`);
+        this.brokerInterface && this.brokerInterface.getDevices();
+      }
     }
   }
 
