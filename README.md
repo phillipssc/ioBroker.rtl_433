@@ -1,4 +1,4 @@
-"![Logo](admin/rtl_433.png)
+![Logo](admin/rtl_433.png)
 # ioBroker.rtl_433
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.rtl_433.svg)](https://www.npmjs.com/package/iobroker.rtl_433)
@@ -12,21 +12,35 @@
 
 ## rtl_433 adapter for ioBroker
 
-rtl_433 adapter for ioBroker
+This adapter allows you to integrate data from the airwaves into ioBroker using an inexpensive [RTL-SDR](https://www.rtl-sdr.com/) USB stick.  These are built around chips originally used to tune in analog TV signals but are now used as software defined radios.  433 MHz is a common frequency as it is open in the US.  The software defined radio is capable of tuning in most of the open frequency bands, the parameters of this adapter allow you to configure the frequency you need.  
 
-This adapter allows you to integrate data from the airwaves into ioBroker using an inexpensive RTL-SDR USB stick.  These are built around chips originally used to tune in analog TV signals but are now used as software defined radios.  433 MHz is a common frequency as it is open in the US.  The software defined radio is capable of tuning in most of the open frequency bands, the parameters of this adapter allow you to configure the frequency you need.  
+You can use multiple RTL-SDR dongles to monitor multiple frequencies by setting up more than one instance of iobroker.rtl_433.  Options are available to use the native index of the device to rtl_433, the USB port, a TCP/IP address and others as supported by the rtl_433 utility. 
 
-You can use multiple RTL-SDR dongles to monitor multiple frequencies by setting up more than one instance of iobroker.rtl_433.  Set the index number of the dongle as the rtl_433 recognizes it in the index setting (e.g. 0, 1, 2, etc...)
+The reason for the 433 in the name is that the adapter requires the utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  All the remote sensors that can be integrated with this adapter are read from the utility and displayed in the protocols tab. As is often the case with USB adapters the device might not be ready the first time it tries to start and may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
 
-The reason for the 433 in the name is that the adapter requires the utility [rtl_433](https://github.com/merbanan/rtl_433) to be installed and runnable on the host computer.  The utility site shows all of the protocols it understands, all the remote sensors that can be integrated with this adapter. As is often the case with USB adapters the device might not be ready the first time it tries to start and may compain about LIB_USB or other USB errors, this is not to be generally worried about - it should start with a minute.
-
-This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON but I have gone through the test cases on the project collecting most of the possible keys.  If a data type is not recognized it will simply be imported as string/value.  The keys of responses supported can easily be extended by modifying lib/datapoints.js.  Setting the logging to debug in the expert mode will show the JSON formatted data from the rtl_433 program.
+This is a work in progress.  I do not have a full set of keys that rtl_433 uses to generate its JSON but I have gone through the test cases on the project collecting most of the possible keys.  If a data type is not recognized it will simply be imported as string/value.  The keys of responses supported can easily be extended by modifying lib/datapoints.js.  Setting the logging to debug for the adapter will show the JSON formatted data from the rtl_433 program.
 
 Note: The meta-data includes an alive state.  This is only pertinent to devices that radio their data frequently like thermometers and not to be a cause for concern on devices that radio their data infrequently like contact sensors.
 
 ## Remote sensor
 
-You can read a remote sensor!  To do so you would only need to install rtl-sdr on the remote computer.  Using a Raspberry Pi as the remote you would do a fresh install, update it, then run 'sudo apt-get install rtl-sdr'. After it is installed you would connect the rtl-sdr adapter on it then run 'rtl_tcp -a [ip address of the Pi]'. Then in the setup pages of the iobroker.rtl_433 adapter put in the device type of TCP/IP and enter the ip address of the Pi.  When the adapter restarts it will connect to the remote sensor to get the data.
+You can read a remote sensor!  To do so you would only need to install rtl-sdr on the remote computer with a rtl-sdr dongle.  Using a Raspberry Pi as the remote you would do a fresh install, update it, then run 
+
+`sudo apt-get install rtl-sdr`
+
+After it is installed you would connect the rtl-sdr adapter on it then run 
+
+``rtl_tcp -a `hostname -I | awk '{print $1}'` ``
+
+Then in the setup pages of the iobroker.rtl_433 adapter put in the device type of TCP/IP and enter the ip:port of the Pi.  Note: if you omit the port it will assume port 1234.  When the adapter restarts it will connect to the remote sensor to get the data.
+
+## Frequency hopping
+
+You can enter multiple frequencies into the frequency input in the options tab separated by a comma or whitespace
+
+`344975000 433920000`
+
+this will tell the rtl_433 utility to hop between those frequencies. The default hop interval is 600 seconds but that can be changed in the hop frequency input just below the frequency input.
 
 ## Troubleshooting
 
@@ -37,7 +51,7 @@ Based on the feedback I have improved the admin pages to be much more comprehens
 * If you contact me, please include the following:
     * version     - the version from the main admin page.
     * rtl_433_cmd - the command line from the main admin page.
-    * any pertainant logs
+    * any pertinent logs
 
 If you are experiencing trouble with a specific device, please let me know the output for that device using 'rtl_433 -F json' so I can figure out what the program is doing when the device transmits.
 
@@ -59,6 +73,8 @@ If you are experiencing trouble with a specific device, please let me know the o
 * a few teaks for converting the old configuration
 ### 1.1.2
 * a few more fixes
+### 1.1.3
+* fixed multi frequency use in the configuration. Fixed a bug that crashed the adapter if an object was not correctly created.
 
 ## License
 MIT License
