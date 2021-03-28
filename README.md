@@ -74,12 +74,12 @@ If you are experiencing trouble with a specific device, please let me know the o
 ### 1.1.2
 * a few more fixes
 ### 1.1.3
-* fixed multi frequency use in the configuration. Fixed a bug that crashed the adapter if an object was not correctly created.
+* Fixed multi frequency use in the configuration. Fixed a bug that crashed the adapter if an object was not correctly created. Hardened the ioBroker interface to errors with heavy use of try/catch and logging.
 
 ## License
 MIT License
 
-Copyright (c) 2020 Sean Phillips <sean.c.phillips@gmail.com>
+Copyright (c) 2021 Sean Phillips <sean.c.phillips@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
