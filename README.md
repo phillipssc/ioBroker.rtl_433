@@ -62,7 +62,7 @@ If you are experiencing trouble with a specific device, please let me know the o
 ### 0.1.3
 * automatically add missing states to existing device, helps future proof the adapter.  Added protocol to INFO, can be used to know what the device is capable of. 
 ### 1.0.0
-* This has been oeprating successfully for over a half a year on my local installation. I have decided to move it to 1.0 designation with full ioBroker package compliance and registration
+* This has been operating successfully for over a half a year on my local installation. I have decided to move it to 1.0 designation with full ioBroker package compliance and registration
 ### 1.0.1
 * Fixed internationalization of admin page labels as well as a few initializattion problems
 ### 1.1.0
@@ -74,7 +74,7 @@ If you are experiencing trouble with a specific device, please let me know the o
 ### 1.1.2
 * a few more fixes
 ### 1.1.3
-* Fixed multi frequency use in the configuration. Fixed a bug that crashed the adapter if an object was not correctly created. Hardened the ioBroker interface to errors with heavy use of try/catch and logging.
+* Fixed frequency hopping use in the configuration. Fixed a bug that crashed the adapter if an object was not correctly created. Hardened the ioBroker interface to errors with heavy use of try/catch and logging.
 
 ## License
 MIT License
