@@ -19,7 +19,8 @@
     "url": "https://github.com/phillipssc/ioBroker.rtl_433"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.4.0"
+    "@iobroker/adapter-core": "^2.4.0",
+    "@joe_six/smoothed-z-score-peak-signal-detection": "^0.1.1"
   },
   "devDependencies": {
     "@iobroker/testing": "^2.4.2",
