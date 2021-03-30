@@ -145,29 +145,57 @@ class rtl_433 extends utils.Adapter {
         this.sendTo(obj.from, obj.command, response, obj.callback);
     };
     if (typeof obj === 'object') {
-      if (obj.command === 'rtl_433') {
-        try {
-          respond(this.adminUtils ? await this.adminUtils.rtl_433(obj.message) : null);
-        }
-        catch(e) {
-          respond(e);
-        }
-      }
-      if (obj.command === 'listSerial') {
-        try {
-          respond(this.adminUtils ? await this.adminUtils.listSerial() : null);
-        }
-        catch(e) {
-          respond(e);
-        }
-      }
-      if (obj.command === 'adapterVersion') {
-        try {
-          respond(this.adminUtils ? this.adminUtils.adapterVersion() : null);
-        }
-        catch(e) {
-          respond(e);
-        }
+      switch (obj.command) {
+        case 'rtl_433':
+          try {
+            respond(this.adminUtils ? await this.adminUtils.rtl_433(obj.message) : null);
+          }
+          catch(e) {
+            respond(e);
+          }
+          break;
+        case 'listSerial':
+          try {
+            respond(this.adminUtils ? await this.adminUtils.listSerial() : null);
+          }
+          catch(e) {
+            respond(e);
+          }
+          break;
+        case 'adapterVersion':
+          try {
+            respond(this.adminUtils ? this.adminUtils.adapterVersion() : null);
+          }
+          catch(e) {
+            respond(e);
+          }
+          break;
+        case 'getDevices':
+          try {
+            respond(this.adminUtils ? await this.adminUtils.getDevices() : null);
+          }
+          catch(e) {
+            respond(e);
+          }
+          break;
+        case 'createSettings':
+          try {
+            respond(this.adminUtils ? this.adminUtils.createSettings(obj.message, this.brokerInterface) : null);
+          }
+          catch(e) {
+            respond(e);
+          }
+          break;
+        case 'removeSettings':
+          try {
+            respond(this.adminUtils ? this.adminUtils.removeSettings(obj.message, this.brokerInterface) : null);
+          }
+          catch(e) {
+            respond(e);
+          }
+          break;
+        default:
+          this.log.debug(`No action exists for ${obj.command}`)
       }
     }
   }

@@ -84,6 +84,80 @@ async function getProtocols() {
     });
 }
 
+async function getDevices() {
+    return new Promise((resolve, reject) => {
+        const _getDevices = () => {
+            let timeout = setTimeout(function () {
+                _getDevices();
+            }, 2000);
+            sendTo(null, 'getDevices', null, (list) => {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                }
+                if (!list || !list.length) {
+                    timeout = setTimeout(function () {
+                        _getDevices();
+                    }, 1000);
+                    return;
+                }
+                $('#devicesList').empty();
+
+                const devices = JSON.parse(list);
+                devices.sort((a,b)=>a._id > b._id ? 1  : -1).forEach(device => {
+                    const regex = /^rtl_433\.\d+\.(.*)$/;
+                    const id = regex.exec(device._id)[1];
+                    if (id !== undefined) {
+                        const display = id !== device.common.name 
+                            ? `${id} (${device.common.name})`
+                            : id; 
+
+                        let text = `<tr class="device">`;
+
+                        text += `<td style="white-space: nowrap;">${display}</td>`;
+
+                        text += '<td style="white-space: nowrap;">';
+                        text += `<label for="${device._id}:FILTER">`;
+                        text += `<input type="checkbox" class="peak_detection value" id="${device._id}:FILTER" />`;
+                        text += '<span></span>';
+                        text += '</label>';
+                        text += '</td>';
+
+                        text += '<td style="white-space: nowrap;">';
+                        text += `<label for="${device._id}:RANGE">`;
+                        text += `<input type="checkbox" class="min_max value" id="${device._id}:RANGE" />`;
+                        text += '<span></span>';
+                        text += '</label>';
+                        text += '</td>';
+
+                        text += '<td style="white-space: nowrap;">';
+                        text += `<label for="${device._id}:HEARTBEAT">`;
+                        text += `<input type="checkbox" class="alive value" id="${device._id}:HEARTBEAT" />`;
+                        text += '<span></span>';
+                        text += '</label>';
+                        text += '</td>';
+
+                        text += '</tr>';
+
+                        $('#devicesList').append($(text));
+                    }
+                });
+
+                $('.peak_detection,.min_max,.alive').click(e => {
+                    console.log(`checked: ${e.target.checked} id: ${e.target.id}`);
+                    sendTo(null, e.target.checked ? 'createSettings' : 'removeSettings', e.target.id, (list) => {
+                        //debugger;
+                    });
+                })
+    
+                if (M) M.updateTextFields();
+                resolve();
+            });
+        }
+        _getDevices();
+    });
+}
+
 async function getVersion() {
     return new Promise((resolve,reject) => {
         const _getVersion = () => { 
@@ -454,4 +528,5 @@ async function initializeNonConfigData(settings) {
     establishEvents();
     await establishCmdLineToOptionsRelation();
     updateConfig(settings,config);
+    await getDevices();
 }
