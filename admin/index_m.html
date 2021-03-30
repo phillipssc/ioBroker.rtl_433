@@ -322,19 +322,34 @@
                     <label for="include" class="translate">include</label>
                     <br><span class="translate">Create objects for newly detected sensors</span>
                 </div>
-            </div>
-            <div class="row">
+            <!-- </div>
+            <div class="row"> -->
                 <div class="col s6 input-field">
                     <input type="text" class="value" id="killcheckinterval" />
                     <label for="killcheckinterval" class="translate">kill check interval</label>
                     <span class="translate">Period of time between scans to determine if the sensor is still alive</span>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col s6 input-field">
                     <input type="text" class="value" id="lifetime" />
                     <label for="lifetime" class="translate">device timeout</label>
                     <span class="translate">Time elapsed without an update to declare sensor dead</span>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col s12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="white-space: nowrap" class="translate" data-lang="ID">ID</th>
+                                <th style="white-space: nowrap" class="translate" data-lang="Peak detection">Peak detection</th>
+                                <th style="white-space: nowrap" class="translate" data-lang="Min max">Min max</th>
+                                <th style="white-space: nowrap" class="translate" data-lang="Alive">Alive</th>
+                            </tr>
+                        </thead>
+                        <tbody id="devicesList">
+                    </table>            
                 </div>
             </div>
         </div>
