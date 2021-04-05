@@ -1,4 +1,4 @@
-async function getComPorts() {
+function getComPorts() {
     return new Promise((resolve,reject) => {
         const _getComPorts = () => {
             let timeout = setTimeout(function () {
@@ -33,7 +33,7 @@ async function getComPorts() {
     });
 }
 
-async function getProtocols() {
+function getProtocols() {
     return new Promise((resolve, reject) => {
         const _getProtocols = () => {
             let timeout = setTimeout(function () {
@@ -84,7 +84,7 @@ async function getProtocols() {
     });
 }
 
-async function getDevices() {
+function getDevices() {
     return new Promise((resolve, reject) => {
         const _getDevices = () => {
             let timeout = setTimeout(function () {
@@ -101,10 +101,12 @@ async function getDevices() {
                     }, 1000);
                     return;
                 }
+                
                 $('#devicesList').empty();
 
-                const devices = JSON.parse(list);
-                devices.sort((a,b)=>a._id > b._id ? 1  : -1).forEach(device => {
+                const devices = JSON.parse(list).sort((a,b)=>a._id > b._id ? 1  : -1);
+                for (let i=0; i<devices.length; i++ ) {
+                    const device = devices[i];
                     const regex = /^rtl_433\.\d+\.(.*)$/;
                     const id = regex.exec(device._id)[1];
                     if (id !== undefined) {
@@ -112,44 +114,39 @@ async function getDevices() {
                             ? `${id} (${device.common.name})`
                             : id; 
 
-                        let text = `<tr class="device">`;
+                        sendTo(null, 'getChannelsOf', id, (channelList) => {
+                            const channels = JSON.parse(channelList);
+                            
+                            let text = `<tr class="device">`;
+                            text += `<td style="white-space: nowrap;">${display}</td>`;
+                            text += '<td style="white-space: nowrap;">';
 
-                        text += `<td style="white-space: nowrap;">${display}</td>`;
+                            // add icons for each rule on the sensor
+                            for (let i=0; i<channels.length; i++) {
+                                const channel = channels[i];
+                                if (channel.common.name != 'META' && channel.common.name != 'INFO') {
+                                    text += `<div class="opts-installed opts-${id}" id="${id}.${channel.common.name}">`;
+                                    text += `    <span>${channel.common.name}</span>`;
+                                    text += `    <i class="material-icons right deleteIcons-${id}">close</i>`;
+                                    text += `</div>`;
+                                }
+                            }
+                            
 
-                        text += '<td style="white-space: nowrap;">';
-                        text += `<label for="${device._id}:FILTER">`;
-                        text += `<input type="checkbox" class="peak_detection value" id="${device._id}:FILTER" />`;
-                        text += '<span></span>';
-                        text += '</label>';
-                        text += '</td>';
+                            text += `<a class="btn opts-active opts-add" id="${id}-ADD">`;
+                            text += '    <i class="material-icons left">add_task</i>';
+                            text += '    <span class="translate" data-lang="save">Add</span>';
+                            text += '</a>';
+                            text += '</td>';
+                            text += '</tr>';
 
-                        text += '<td style="white-space: nowrap;">';
-                        text += `<label for="${device._id}:RANGE">`;
-                        text += `<input type="checkbox" class="min_max value" id="${device._id}:RANGE" />`;
-                        text += '<span></span>';
-                        text += '</label>';
-                        text += '</td>';
-
-                        text += '<td style="white-space: nowrap;">';
-                        text += `<label for="${device._id}:HEARTBEAT">`;
-                        text += `<input type="checkbox" class="alive value" id="${device._id}:HEARTBEAT" />`;
-                        text += '<span></span>';
-                        text += '</label>';
-                        text += '</td>';
-
-                        text += '</tr>';
-
-                        $('#devicesList').append($(text));
+                            $('#devicesList').append($(text));
+                            $(`#${id}-ADD`).click((e) => { openAddRuleForm(e) });
+                            $(`.opts-${id}`).click((e) => { openUpdateRuleForm(e) });
+                            $(`.deleteIcons-${id}`).click((e) => { deleteRule(e) });
+                        });
                     }
-                });
-
-                $('.peak_detection,.min_max,.alive').click(e => {
-                    console.log(`checked: ${e.target.checked} id: ${e.target.id}`);
-                    sendTo(null, e.target.checked ? 'createSettings' : 'removeSettings', e.target.id, (list) => {
-                        //debugger;
-                    });
-                })
-    
+                }
                 if (M) M.updateTextFields();
                 resolve();
             });
@@ -158,7 +155,207 @@ async function getDevices() {
     });
 }
 
-async function getVersion() {
+function openAddRuleForm(e) {
+    const targetElementId = e.target.id || e.target.parentElement.id;
+    sendTo(null, 'getStatesOf', targetElementId.replace('-ADD',''), (statesList) => {
+        const regex = /^[\w-]+\.\d+\.[\w-]+\.[\w-]+$/;
+        const states = JSON.parse(statesList).filter(state => regex.test(state._id));
+        $(`.fieldindxs`).empty();
+        states.forEach(state => {
+            if(state.common.name !== "channel") {
+                $(`.fieldindxs`).append(
+                    $('<option>', {"value": state.common.name}).text(state.common.name)
+                );
+            }
+        });
+    });
+    $('#device_id').val(targetElementId);
+    $('#action_type').val('insert');
+    $('#update_rule').addClass('hidden');
+    $('#create_rule').removeClass('hidden');
+    $('#popup').removeClass('hidden');
+}
+
+function openUpdateRuleForm(e) {
+    const targetElementId = e.target.id || e.target.parentElement.id;
+    sendTo(null, 'getStatesOf', targetElementId, (statesList) => {
+        const states = JSON.parse(statesList);
+        states.forEach((state) => {
+            sendTo(null, 'getState', state._id, (stateObj) => {
+                let parts = state._id.split('.').reverse();
+                const field = parts[0];
+                const regex = /^(\D+)\d*$/;
+                parts = regex.exec(parts[1]);
+                $(`#${parts[1]}-${field}`).val(JSON.parse(stateObj).val);
+                if (M) M.updateTextFields();
+                $('#rule').val(parts[1]).change();
+                if (M) M.FormSelect.init($('#rule'), {});
+            });
+        });
+    });
+    sendTo(null, 'getStatesOf', targetElementId.split('.')[0], (statesList) => {
+        const regex = /^[\w-]+\.\d+\.[\w-]+\.[\w-]+$/;
+        const states = JSON.parse(statesList).filter(state => regex.test(state._id));
+        $(`.fieldindxs`).empty();
+        states.forEach(state => {
+            if(state.common.name !== "channel") {
+                $(`.fieldindxs`).append(
+                    $('<option>', {"value": state.common.name}).text(state.common.name)
+                );
+            }
+        });
+    });
+    $('#device_id').val(targetElementId);
+    $('#action_type').val('update');
+    $('#update_rule').removeClass('hidden');
+    $('#update_rule span').text(targetElementId);
+    $('#create_rule').addClass('hidden');
+    $('#popup').removeClass('hidden');
+}
+
+function makeRuleForm(rule, fields) {
+    let section = $('<div>', { "class": rule === 'HEARTBEAT' ? "opts" : "opts hidden", "id": rule });
+    fields.forEach(field => {
+        if (field.input) section.append(
+            $('<div>',{ "class": "row" }).append(
+                $('<div>', { "class": "col s12 input-field"}).append(
+                    $('<input>', { "type": "text", "class": "rule", "id": `${rule}-${field.name}`, "list": `${rule}-${field.name}indxs`}),
+                    $(`<datalist id="${rule}-${field.name}indxs" class="${field.name}indxs">`),
+                    $('<label>', { "for": `${rule}-${field.name}`, "class": "translate" }).text(`${field.name}`),
+                    $('<span>', { "class": "translate" }).text(`${field.description}`)
+                )
+            )
+        )
+    });
+    $('#taskforms').append(section);
+}
+
+function initRuleFormValues(rules) {
+    Object.keys(rules).forEach((key) => {
+        makeRuleForm(key, rules[key]);
+        rules[key].forEach((rule) => {
+            $(`#${key}-${rule.name}`).val(rule.value);
+            if (rule.check === 'integer') {
+                $(`#${key}-${rule.name}`).keyup(function() {
+                    if (this.value === '' || validateInteger(this)) {
+                        $(`#${key}-${rule.name}`).removeClass("invalid");
+                    }
+                    else {
+                        $(`#${key}-${rule.name}`).addClass("invalid");
+                    }
+                });
+            }
+            if (rule.check === 'float') {
+                $(`#${key}-${rule.name}`).keyup(function() {
+                    if (this.value === '' || validateFloat(this)) {
+                        $(`#${key}-${rule.name}`).removeClass("invalid");
+                    }
+                    else {
+                        $(`#${key}-${rule.name}`).addClass("invalid");
+                    }
+                });
+            }
+        });
+    });
+    if (M) M.updateTextFields();
+}
+
+function initRuleFormCheck() {
+    function _initRuleFormCheck() {
+        let formValid = true;
+        [...$('.popup input:visible')].forEach(input => {
+            if ($(input).hasClass('invalid') || $(input).val() === '') formValid = false;
+        });
+        if (formValid) {
+            $('.opts-save, .opts-save-close').removeClass('disabled');
+        }
+        else {
+            $('.opts-save, .opts-save-close').addClass('disabled');
+        }
+    }
+    $('.popup input').keyup((e) => { _initRuleFormCheck() });
+    $('#rule').change((e) => { setTimeout( _initRuleFormCheck, 200) });
+    _initRuleFormCheck();
+    $('.opts-save, .opts-save-close').click(async (e) => {
+        if ($('action_type').val() === "update") {
+            await updateRule();
+        }
+        else {
+            await submitRule();
+        }
+        if ($(e.target.parentElement).hasClass('opts-save-close')) $('#popup').addClass('hidden');
+    });
+}
+
+function submitRule() {
+    return new Promise((resolve, reject) => {
+        if ($('#action_type').val() === 'update') return(resolve(updateRule()));
+        if ($('.opts-save').hasClass('disabled')) return(resolve());
+        const device_id = $('#device_id').val();
+        const rule = $('#rule').val();
+        function resetSensorsTab() { 
+            $('#devicesList').empty();
+            $('#taskforms').empty();
+            // setTimeout(() => { 
+                initDevices();
+            // }, 1000);
+        }
+        sendTo(null, 'createSettings', `${device_id.replace('-ADD','')}_:_${rule}`, async (chAddr) => {
+            const regex = /^rtl_433\.\d+\.(.+\..*)$/
+            const parts = regex.exec(chAddr.id);
+            if (parts) {
+                const inputs = [...$('.popup input:visible')];
+                if (inputs.length !== 0) {
+                    for (let i=0; i<inputs.length; i++ ) {
+                        const input = inputs[i];
+                        const field = input.id.split('-').reverse()[0];
+                        if (field && field !== '') {
+                            const value = $(input).val();
+                            sendTo(null, 'setState', `${parts[1]}_:_${value}`, () => {});
+                        }
+                    }
+                    resolve();
+                }
+            }
+            resetSensorsTab();
+            resolve(chAddr);
+        });
+    });
+}
+
+function updateRule() {
+    return new Promise((resolve, reject) => {
+        if ($('.opts-save').hasClass('disabled')) return(resolve());
+        const device_id = $('#device_id').val();
+        // populate the data...
+        const inputs = [...$('.popup input:visible')];
+        if (inputs.length !== 0) {
+            for (let i=0; i<inputs.length; i++ ) {
+                const input = inputs[i];
+                const field = input.id.split('-').reverse()[0];
+                if (field && field !== '') {
+                    const value = $(input).val();
+                    sendTo(null, 'setState', `${device_id}.${field}_:_${value}`, () => {});
+                }
+            }
+            resolve();
+        }
+        else {
+            reject();
+        }
+    });
+}
+
+function deleteRule(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    sendTo(null, 'removeSettings', $(e.target.parentElement).attr('id'), (list) => {
+        e.preventDefault()
+        $(e.target.parentElement).addClass('hidden');
+    });
+}
+
+function getVersion() {
     return new Promise((resolve,reject) => {
         const _getVersion = () => { 
             let timeout = setTimeout(function () {
@@ -205,11 +402,19 @@ async function getVersion() {
     });
 }
 
-async function getSystemConfig() {
+function getSystemConfig() {
     return new Promise((resolve,reject) => {
         socket.emit('getObject', 'system.config', function (err, res) {
             if (err) reject(err);
             resolve(res);
+        });
+    });
+}
+
+function getRules() {
+    return new Promise((resolve,reject) => {
+        sendTo(null, 'getRules', null, (res) => {
+            resolve(JSON.parse(res));
         });
     });
 }
@@ -420,12 +625,28 @@ function establishCmdLineToOptionsRelation() {
     reverseCmdline();
 }
 
+function validateIPAddress(address) {
+    var expression = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])):*\d*\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?:*\d*\s*$))/;
+    return expression.test(address.value);
+}
+
+function validateInteger(idx) {
+    var expression = /^\d+$/;
+    return expression.test(idx.value);
+}
+
+function validateIntegerPlus(idx) {
+    var expression = /^\d+M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}$/;
+    return expression.test(idx.value);
+}
+
+function validateFloat(num) {
+    var expression = /^\d+\.?\d*$/;
+    return expression.test(num.value);
+}
+
 function establishBoundsChecking() {
     // ip address verification 
-    function validateIPAddress(address) {
-        var expression = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])):*\d*\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?:*\d*\s*$))/;
-        return expression.test(address.value);
-    }
     $("#tcpData").keyup(function() {
         if (this.value === '' || validateIPAddress(this)) {
             $("#tcpData").removeClass("invalid");
@@ -436,13 +657,9 @@ function establishBoundsChecking() {
         }
     });
     // integer verification
-    function validateIteger(idx) {
-        var expression = /^\d+$/;
-        return expression.test(idx.value);
-    }
     ['#idxData', '#arg_H', '#arg_p', '#arg_Y', '#killcheckinterval', '#lifetime'].forEach(id => {
         $(id).keyup(function() {
-            if (this.value === '' || validateIteger(this)) {
+            if (this.value === '' || validateInteger(this)) {
                 $(id).removeClass("invalid");
             }
             else {
@@ -451,13 +668,9 @@ function establishBoundsChecking() {
         })
     });
     // integer plus verification
-    function validateItegerPlus(idx) {
-        var expression = /^\d+M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}[,;\s]*\d*M{0,1}k{0,1}$/;
-        return expression.test(idx.value);
-    }
     ['#arg_f', '#arg_s'].forEach(id => {
         $(id).keyup(function() {
-            if (this.value === '' || validateItegerPlus(this)) {
+            if (this.value === '' || validateIntegerPlus(this)) {
                 $(id).removeClass("invalid");
             }
             else {
@@ -519,6 +732,13 @@ function updateConfig(settings, config) {
     }
 }
 
+async function initDevices() {
+    await getDevices();
+    const rules = await getRules();
+    initRuleFormValues(rules);
+    initRuleFormCheck();
+}
+
 async function initializeNonConfigData(settings) {
     const config = await getSystemConfig();
     await getComPorts();
@@ -528,5 +748,12 @@ async function initializeNonConfigData(settings) {
     establishEvents();
     await establishCmdLineToOptionsRelation();
     updateConfig(settings,config);
-    await getDevices();
+    initDevices();
+    $('#rule').change((e) => {
+        $('.opts').addClass('hidden');
+        $('#'+e.target.value).removeClass('hidden');
+    });
+    $('.opts-cancel').click((e) => {
+        $('#popup').addClass('hidden');
+    });
 }
