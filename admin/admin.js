@@ -232,8 +232,8 @@ function makeRuleForm(rule, fields) {
 
 function initRuleFormValues(rules) {
     Object.keys(rules).forEach((key) => {
-        makeRuleForm(key, rules[key]);
-        rules[key].forEach((rule) => {
+        makeRuleForm(key, rules[key].inputs);
+        rules[key].inputs.forEach((rule) => {
             $(`#${key}-${rule.name}`).val(rule.value);
             if (rule.check === 'integer') {
                 $(`#${key}-${rule.name}`).keyup(function() {
