@@ -65,6 +65,8 @@ class rtl_433 extends utils.Adapter {
           this.restartDuration = BASE_RESTART_DURATION;
         }
         connected = connectState;
+        // DEBUG ONLY!!!
+        this.setForeignState('system.adapter.rtl_433.0.logLevel', 'debug');
       });
   
       server.on('data', data => {
@@ -180,7 +182,7 @@ class rtl_433 extends utils.Adapter {
           break;
         case 'createSettings':
           try {
-            respond(this.adminUtils ? this.adminUtils.createSettings(obj.message, this.brokerInterface) : null);
+            respond(this.adminUtils ? await this.adminUtils.createSettings(obj.message, this.brokerInterface) : null);
           }
           catch(e) {
             respond(e);
@@ -188,14 +190,55 @@ class rtl_433 extends utils.Adapter {
           break;
         case 'removeSettings':
           try {
-            respond(this.adminUtils ? this.adminUtils.removeSettings(obj.message, this.brokerInterface) : null);
+            respond(this.adminUtils ? this.adminUtils.removeSettings(obj.message) : null);
           }
           catch(e) {
             respond(e);
           }
           break;
-        default:
-          this.log.debug(`No action exists for ${obj.command}`)
+        case 'getChannelsOf':
+          try {
+            respond(this.adminUtils ? await this.adminUtils.getChannelsOf(obj.message) : null);
+          }
+          catch(e) {
+            respond(e);
+          }
+          break;
+          case 'getStatesOf':
+            try {
+              respond(this.adminUtils ? await this.adminUtils.getStatesOf(obj.message) : null);
+            }
+            catch(e) {
+              respond(e);
+            }
+            break;
+          case 'getState':
+            try {
+              respond(this.adminUtils ? await this.adminUtils.getState(obj.message) : null);
+            }
+            catch(e) {
+              respond(e);
+            }
+            break;
+
+          case 'getRules':
+            try {
+              respond(this.adminUtils ? this.adminUtils.getRules() : null);
+            }
+            catch(e) {
+              respond(e);
+            }
+            break;
+          case 'setState':
+            try {
+              respond(this.adminUtils ? await this.adminUtils.setState(obj.message) : null);
+            }
+            catch(e) {
+              respond(e);
+            }
+            break;
+          default:
+          this.log.error(`No action exists for ${obj.command}`)
       }
     }
   }
