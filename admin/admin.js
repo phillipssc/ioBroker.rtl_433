@@ -309,6 +309,7 @@ function submitRule() {
             const regex = /^rtl_433\.\d+\.(.+\..*)$/
             const parts = regex.exec(chAddr.id);
             if (parts) {
+                const devAddr = parts[1];
                 const inputs = [...$('.popup input:visible')];
                 if (inputs.length !== 0) {
                     for (let i=0; i<inputs.length; i++ ) {
@@ -316,7 +317,7 @@ function submitRule() {
                         const field = input.id.split('-').reverse()[0];
                         if (field && field !== '') {
                             const value = $(input).val();
-                            sendTo(null, 'setState', `${parts[1]}_:_${value}`, () => {});
+                            sendTo(null, 'setState', `${devAddr}.${field}_:_${value}`, () => {});
                         }
                     }
                     resolve();
