@@ -1,0 +1,26 @@
+{
+    "HEARTBEAT": [
+        { "name": "heartbeat", "description": "A generous estimate of time between signals", "type": "number", "check": "integer", "value": 30000, "input": true },
+        { "name": "alive", "description": "Whether the device is signaling within the proper period of time", "type": "boolean", "value": false, "input": false }
+    ],
+    "MEDIAN": [
+        { "name": "field", "description": "Field to monitor", "type": "string", "check": "string", "value": "", "input": true },
+        { "name": "length", "description": "the number of data points to take the median of", "type": "number", "check": "integer", "value": 3, "input": true }
+    ],
+    "PEAKDETECT": [
+        { "name": "field", "description": "Field to monitor", "type": "string", "check": "string", "value": "", "input": true },
+        { "name": "lag", "description": "how much your data will be smoothed and how adaptive the algorithm is to changes", "type": "number", "check": "integer", "value": 30, "input": true },
+        { "name": "threshold", "description": "the number of standard deviations from the moving mean above which the algorithm will classify a new datapoint as being a signal", "type": "number", "check": "float", "value": 5, "input": true },
+        { "name": "influence", "description": "the influence of signals on the algorithm\"s detection threshold", "type": "number", "check": "float", "value": 0, "input": true }
+    ],
+    "RANGE": [
+        { "name": "field", "description": "Field to monitor", "type": "string", "check": "string", "value": "", "input": true },
+        { "name": "min", "description": "Don\"t report below this limit", "type": "number", "check": "float", "value": null, "input": true },
+        { "name": "max", "description": "Don\"t report above this limit", "type": "number", "check": "float", "value": null, "input": true }
+    ],
+    "RESET": [
+        { "name": "field", "description": "Field to monitor", "type": "string", "check": "string", "value": "", "input": true },
+        { "name": "period", "description": "Period to wait to reset sensor", "type": "number", "check": "integer", "value": 15000, "input": true },
+        { "name": "value", "description": "Value to set it to upon reset", "type": "string", "check": "string", "value": "0", "input": true }
+    ]
+}
