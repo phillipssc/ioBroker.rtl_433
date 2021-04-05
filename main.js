@@ -66,7 +66,7 @@ class rtl_433 extends utils.Adapter {
         }
         connected = connectState;
         // DEBUG ONLY!!!
-        this.setForeignState('system.adapter.rtl_433.0.logLevel', 'debug');
+        // this.setForeignState('system.adapter.rtl_433.0.logLevel', 'debug');
       });
   
       server.on('data', data => {
