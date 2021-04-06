@@ -56,25 +56,23 @@ function getProtocols() {
                     const parts = lines[j].match((/\s*\[(\d*)\](\*?)\s{1,2}(.*)/));
                     const hidden = parts[2] === '*' ? ' hiddendiv blacklisted' : '';
                     const color = parts[2] === '*' ? ' color: maroon;' : '';
-                    let text = `<tr class="device${hidden}" data-id="${parts[1]}">`;
-                    text += '<td style="white-space: nowrap;">';
-                    text += `<label for="include${parts[1]}" class="translate">`;
-                    text += `<input type="checkbox" class="pIncludes value arg" id="include${parts[1]}" disabled />`;
-                    text += '<span></span>';
-                    text += '</label>';
-                    text += '</td>';
-                    text += '<td style="white-space: nowrap;">';
-                    text += `<label for="exclude${parts[1]}" class="translate">`;
-                    text += `<input type="checkbox" class="pExcludes value arg" id="exclude${parts[1]}" />`;
-                    text += '<span></span>';
-                    text += '</label>';
-                    text += '</td>';
-                    text += `<td style="white-space: nowrap;${color}">${parts[1]}</td>`;
-                    text += `<td style="white-space: nowrap;${color}">${parts[3]}</td>`;
-                    text += '</tr>';
-
-                    $('#protocolsList').append($(text));
-                    const cBox = $(`#protocol${parts[1]}`);
+                    let html = $('<tr>',{ "class": `device${hidden}`, "data-id": `${parts[1]}` }).append(
+                        $('<td>', { "style": "white-space: nowrap;" }).append(
+                            $('<label>', { "for": `include${parts[1]}`, "class": "translate" }).append(
+                                $('<input>', { "type": "checkbox", "class": "pIncludes value arg", "id": `include${parts[1]}`, "disabled": true }),
+                                $('<span>')
+                            )
+                        ),
+                        $('<td>', { "style": "white-space: nowrap;" }).append(
+                            $('<label>', { "for": `exclude${parts[1]}`, "class": "translate" }).append(
+                                $('<input>', { "type": "checkbox", "class": "pExcludes value arg", "id": `exclude${parts[1]}`, "disabled": true }),
+                                $('<span>')
+                            )
+                        ),
+                        $('<td>', { "style": "white-space: nowrap;${color}" }).text(parts[1]),
+                        $('<td>', { "style": "white-space: nowrap;${color}" }).text(parts[3])
+                    )
+                    $('#protocolsList').append(html);
                 }
                 if (M) M.updateTextFields();
                 resolve();
@@ -117,30 +115,31 @@ function getDevices() {
                         sendTo(null, 'getChannelsOf', id, (channelList) => {
                             const channels = JSON.parse(channelList);
                             
-                            let text = `<tr class="device">`;
-                            text += `<td style="white-space: nowrap;">${display}</td>`;
-                            text += '<td style="white-space: nowrap;">';
-
                             // add icons for each rule on the sensor
+                            const icons = [];
                             for (let i=0; i<channels.length; i++) {
                                 const channel = channels[i];
                                 if (channel.common.name != 'META' && channel.common.name != 'INFO') {
-                                    text += `<div class="opts-installed opts-${id}" id="${id}.${channel.common.name}">`;
-                                    text += `    <span>${channel.common.name}</span>`;
-                                    text += `    <i class="material-icons right deleteIcons-${id}">close</i>`;
-                                    text += `</div>`;
+                                    const icon = $('<div>', { "class": `opts-installed opts-${id}`, "id": `${id}.${channel.common.name}` }).append(
+                                        $('<span>').text(channel.common.name),
+                                        $('<i>', { "class": `material-icons right deleteIcons-${id}` }).text("close")
+                                    );
+                                    icons.push(icon);
                                 }
                             }
-                            
 
-                            text += `<a class="btn opts-active opts-add" id="${id}-ADD">`;
-                            text += '    <i class="material-icons left">add_task</i>';
-                            text += '    <span class="translate" data-lang="save">Add</span>';
-                            text += '</a>';
-                            text += '</td>';
-                            text += '</tr>';
+                            let html = $( '<tr>', { "class": "device" }).append(
+                                $('<td>', { "style": "white-space: nowrap;" }).text(display),
+                                $('<td>', { "style": "white-space: nowrap;" }).append(icons),
+                                $('<td>', { "style": "white-space: nowrap;" }).append(
+                                    $('<a>', { "class": "btn opts-active opts-add", "id": `${id}-ADD` }).append(
+                                        $('<i>', { "class": "material-icons left" }).text('add_task'),
+                                        $('<span>', { "class": "translate", "data-lang": "save" }).text('Add')
+                                    )
+                                ),
+                            )
 
-                            $('#devicesList').append($(text));
+                            $('#devicesList').append(html);
                             $(`#${id}-ADD`).click((e) => { openAddRuleForm(e) });
                             $(`.opts-${id}`).click((e) => { openUpdateRuleForm(e) });
                             $(`.deleteIcons-${id}`).click((e) => { deleteRule(e) });
@@ -637,7 +636,7 @@ function validateIPAddress(address) {
 }
 
 function validateInteger(idx) {
-    var expression = /^\d+$/;
+    var expression = /^-*\d+$/;
     return expression.test(idx.value);
 }
 
@@ -647,7 +646,7 @@ function validateIntegerPlus(idx) {
 }
 
 function validateFloat(num) {
-    var expression = /^\d+\.?\d*$/;
+    var expression = /^-*\d+\.?\d*$/;
     return expression.test(num.value);
 }
 
