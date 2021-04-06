@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0",
-    "@joe_six/smoothed-z-score-peak-signal-detection": "^0.1.1"
+    "@joe_six/smoothed-z-score-peak-signal-detection": "^0.1.1",
+    "node-pid-controller": "^1.0.1"
   },
   "devDependencies": {
     "@iobroker/testing": "^2.4.2",

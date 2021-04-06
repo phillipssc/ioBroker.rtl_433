@@ -121,6 +121,66 @@
         "displayName": "Peak Detection",
         "filename": "peakDetect.js"
     },
+    "PIDCTRL": {
+        "inputs": [
+            {
+                "name": "field",
+                "description": "Field to monitor",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "k_p",
+                "description": "",
+                "type": "number",
+                "check": "float",
+                "value": null,
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "k_i",
+                "description": "",
+                "type": "number",
+                "check": "float",
+                "value": null,
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "k_d",
+                "description": "",
+                "type": "number",
+                "check": "float",
+                "value": null,
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "target",
+                "description": "The target the PID controller should strive to achieve",
+                "type": "number",
+                "check": "float",
+                "value": null,
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "output",
+                "description": "The output of the PID controller appears here",
+                "type": "number",
+                "check": "float",
+                "value": null,
+                "input": false,
+                "output": true
+            }
+        ],
+        "displayName": "PID Controller",
+        "filename": "pidController.js"
+    },
     "RANGE": {
         "inputs": [
             {
