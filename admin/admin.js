@@ -119,13 +119,16 @@ function getDevices() {
                             const icons = [];
                             for (let i=0; i<channels.length; i++) {
                                 const channel = channels[i];
-                                if (channel.common.name != 'META' && channel.common.name != 'INFO') {
-                                    const icon = $('<div>', { "class": `opts-installed opts-${id}`, "id": `${id}.${channel.common.name}` }).append(
-                                        $('<span>').text(channel.common.name),
-                                        $('<i>', { "class": `material-icons right deleteIcons-${id}` }).text("close")
-                                    );
-                                    icons.push(icon);
-                                }
+                                sendTo(null, 'getState', `${id}.${channel}.field`, (fieldData) => {
+                                    if (channel.common.name != 'META' && channel.common.name != 'INFO') {
+                                        const icon = $('<div>', { "class": `opts-installed opts-${id}`, "id": `${id}.${channel.common.name}` }).append(
+                                            $('<div>', { "class": "ruleType"}).text(channel.common.name),
+                                            $('<div>', { "class": "ruleColumn"}).text(fieldData.val),
+                                            $('<i>', { "class": `material-icons right deleteIcons-${id}` }).text("close")
+                                        );
+                                        icons.push(icon);
+                                    }
+                                });
                             }
 
                             let html = $( '<tr>', { "class": "device" }).append(
