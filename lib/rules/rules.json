@@ -22,6 +22,30 @@
         "displayName": "Heartbeat",
         "filename": "heartbeat.js" 
     },
+    "MEAN": {
+        "inputs": [
+            { 
+                "name": "field",
+                "description": "Field to monitor",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            },
+            { 
+                "name": "length",
+                "description": "the number of data points to take the mean of",
+                "type": "number",
+                "check": "integer",
+                "value": 3,
+                "input": true,
+                "output": true
+            }
+        ],
+        "displayName": "Mean Filter",
+        "filename": "meanFilter.js"
+    },
     "MEDIAN": {
         "inputs": [
             { 
@@ -82,6 +106,15 @@
                 "check": "float",
                 "value": 0,
                 "input": true,
+                "output": true
+            },
+            { 
+                "name": "output",
+                "description": "The output of the algorhithm",
+                "type": "number",
+                "check": "integer",
+                "value": 0,
+                "input": false,
                 "output": true
             }
         ],
