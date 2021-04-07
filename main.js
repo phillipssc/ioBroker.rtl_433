@@ -236,7 +236,18 @@ class rtl_433 extends utils.Adapter {
             catch(e) {
               respond(e);
             }
-            break;
+          case 'injectJSON':
+            try {
+              JSON.parse(obj.message.toString())
+              const saveVal = this.config.include;
+              this.config.include = true;
+              respond(this.brokerInterface ? this.brokerInterface.handleIncomingObject(obj.message.toString()) : null);
+              this.config.include = saveVal;
+            }
+            catch(e) {
+              respond(e);
+            }
+          break;
           default:
           this.log.error(`No action exists for ${obj.command}`)
       }
