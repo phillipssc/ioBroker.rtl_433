@@ -1,4 +1,28 @@
 {
+    "DEBOUNCE": {
+        "inputs": [
+            {
+                "name": "field",
+                "description": "Field to monitor",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "period",
+                "description": "Period to wait to reset sensor",
+                "type": "number",
+                "check": "integer",
+                "value": 15000,
+                "input": true,
+                "output": true
+            }
+        ],
+        "displayName": "Debounce",
+        "filename": "debounce.js"
+    },
     "HEARTBEAT": {
         "inputs": [
             { 
