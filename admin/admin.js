@@ -82,6 +82,17 @@ function getProtocols() {
     });
 }
 
+async function getStateAsync(id) {
+    return new Promise((resolve, reject) => {
+        sendTo(null, 'getState', id, (data) => {
+            if (data !== "null") {
+                resolve(JSON.parse(data));
+            }
+            else resolve(null);
+        });
+    });
+}
+
 function getDevices() {
     return new Promise((resolve, reject) => {
         const _getDevices = () => {
@@ -119,16 +130,24 @@ function getDevices() {
                             const icons = [];
                             for (let i=0; i<channels.length; i++) {
                                 const channel = channels[i];
-                                sendTo(null, 'getState', `${id}.${channel}.field`, (fieldData) => {
-                                    if (channel.common.name != 'META' && channel.common.name != 'INFO') {
-                                        const icon = $('<div>', { "class": `opts-installed opts-${id}`, "id": `${id}.${channel.common.name}` }).append(
+                                if (channel.common.name != 'META' && channel.common.name != 'INFO') {
+                                    const icon = $('<div>', { "class": `opts-installed opts-${id}`, "id": `${id}.${channel.common.name}` }).append(
+                                        $('<div>', { "class": "ruleText"}).append(
                                             $('<div>', { "class": "ruleType"}).text(channel.common.name),
-                                            $('<div>', { "class": "ruleColumn"}).text(fieldData.val),
+                                            $('<div>', { "id": `${id}-${channel.common.name}-ruleField`, "class": "ruleField"}),
+                                        ),
+                                        $('<div>', { "class": "iconField"}).append(
                                             $('<i>', { "class": `material-icons right deleteIcons-${id}` }).text("close")
-                                        );
-                                        icons.push(icon);
-                                    }
-                                });
+                                        )
+                                    );
+                                    icons.push(icon);
+                                    sendTo(null, 'getState', `${id}.${channel.common.name}.field`, async (fieldName) => {
+                                        if (fieldName !== "null") {
+                                            $(`#${id}-${channel.common.name}-ruleField`).text(JSON.parse(fieldName).val);
+                                        }
+                                    });
+
+                                }
                             }
 
                             let html = $( '<tr>', { "class": "device" }).append(
@@ -158,7 +177,7 @@ function getDevices() {
 }
 
 function openAddRuleForm(e) {
-    const targetElementId = e.target.id || e.target.parentElement.id;
+    const targetElementId = e.target.parentElement.id;
     sendTo(null, 'getStatesOf', targetElementId.replace('-ADD',''), (statesList) => {
         const regex = /^[\w-]+\.\d+\.[\w-]+\.[\w-]+$/;
         const states = JSON.parse(statesList).filter(state => regex.test(state._id));
@@ -179,7 +198,7 @@ function openAddRuleForm(e) {
 }
 
 function openUpdateRuleForm(e) {
-    const targetElementId = e.target.id || e.target.parentElement.id;
+    const targetElementId = e.target.id;
     sendTo(null, 'getStatesOf', targetElementId, (statesList) => {
         const states = JSON.parse(statesList);
         states.forEach((state) => {
@@ -294,19 +313,18 @@ function initRuleFormCheck() {
     });
 }
 
+function resetSensorsTab() { 
+    $('#devicesList').empty();
+    $('#taskforms').empty();
+    initDevices();
+}
+
 function submitRule() {
     return new Promise((resolve, reject) => {
         if ($('#action_type').val() === 'update') return(resolve(updateRule()));
         if ($('.opts-save').hasClass('disabled')) return(resolve());
         const device_id = $('#device_id').val();
         const rule = $('#rule').val();
-        function resetSensorsTab() { 
-            $('#devicesList').empty();
-            $('#taskforms').empty();
-            // setTimeout(() => { 
-                initDevices();
-            // }, 1000);
-        }
         sendTo(null, 'createSettings', `${device_id.replace('-ADD','')}_:_${rule}`, async (chAddr) => {
             const regex = /^rtl_433\.\d+\.(.+\..*)$/
             const parts = regex.exec(chAddr.id);
@@ -346,6 +364,7 @@ function updateRule() {
                     sendTo(null, 'setState', `${device_id}.${field}_:_${value}`, () => {});
                 }
             }
+            resetSensorsTab();
             resolve();
         }
         else {
@@ -357,9 +376,10 @@ function updateRule() {
 function deleteRule(e) {
     e.preventDefault();
     e.stopPropagation();
-    sendTo(null, 'removeSettings', $(e.target.parentElement).attr('id'), (list) => {
+    const targetElementId = e.target.parentElement.parentElement.id;
+    sendTo(null, 'removeSettings', targetElementId, (list) => {
         e.preventDefault()
-        $(e.target.parentElement).addClass('hidden');
+        resetSensorsTab();
     });
 }
 
