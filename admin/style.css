@@ -38,6 +38,7 @@
     margin-left: 15px;
     margin-right: 15px;
 }
+.m .tabs .tab.hidden,
 .hidden {
     display: none;
 }
@@ -89,4 +90,11 @@ div.opts-installed i.material-icons.right:hover {
     float: left;
     max-width: 97px;
     pointer-events: none;
+}
+textarea#run_box {
+    width: 100vw;
+    height: 48vh;
+}
+textarea#run_box.invalid {
+    border: 5px solid #f44336;
 }

@@ -311,6 +311,10 @@ function initRuleFormCheck() {
         }
         if ($(e.target.parentElement).hasClass('opts-save-close')) $('#popup').addClass('hidden');
     });
+    $('#run_box').keyup((e) => { 
+        if ($(e.target).hasClass('invalid')) $('.opts-run').addClass('disabled');
+        else $('.opts-run').removeClass('disabled');
+    });
 }
 
 function resetSensorsTab() { 
@@ -673,6 +677,16 @@ function validateFloat(num) {
     return expression.test(num.value);
 }
 
+function validateJSON(str) {
+    try {
+        JSON.parse(str);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+}
+
 function establishBoundsChecking() {
     // ip address verification 
     $("#tcpData").keyup(function() {
@@ -706,6 +720,16 @@ function establishBoundsChecking() {
             }
         })
     });
+    // json verification
+    const textbox = $('#run_box');
+    textbox.keyup(function() {
+        if (this.value === '' || validateJSON(`[${this.value.replace(/\n$/, '')}]`.replaceAll("\n",","))) {
+            textbox.removeClass("invalid");
+        }
+        else {
+            textbox.addClass("invalid");
+        }
+    })
 }
 
 function establishEvents() {
@@ -760,6 +784,29 @@ function updateConfig(settings, config) {
     }
 }
 
+function injectJSON() {
+    const PERIOD = 1000;
+    if ($('a.btn.opts-run').hasClass('disabled')) return;
+    $('a.btn.opts-run').addClass('disabled');
+    const inputData = $('#run_box').val().split('\n');
+    function injectNext() {
+        if (inputData.length === 0) {
+            $('a.btn.opts-run').removeClass('disabled');
+            return;
+        };
+        setTimeout(()=>{
+            _injectJSON(inputData.shift());
+        }, PERIOD);
+    }
+    function _injectJSON(line) {
+        console.log(`Sending data : ${line}`);
+        sendTo(null, 'injectJSON', line, () => {
+            injectNext();
+        });
+    }
+    _injectJSON(inputData.shift());
+}
+
 async function initDevices() {
     await getDevices();
     const rules = await getRules();
@@ -784,4 +831,5 @@ async function initializeNonConfigData(settings) {
     $('.opts-cancel').click((e) => {
         $('#popup').addClass('hidden');
     });
+    $('a.btn.opts-run').click(injectJSON);
 }
