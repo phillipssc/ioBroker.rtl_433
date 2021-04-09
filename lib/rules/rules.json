@@ -23,7 +23,7 @@
         "displayName": "Bad Value",
         "filename": "badValue.js"
     },
-    "DEBOUNCE": {
+    "CALIBRATE": {
         "inputs": [
             {
                 "name": "field",
@@ -34,6 +34,21 @@
                 "input": true,
                 "output": true
             },
+            {
+                "name": "adjustment",
+                "description": "The amount to adjust the value by",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            }
+        ],
+        "displayName": "Calibrate",
+        "filename": "calibrate.js"
+    },
+    "DEBOUNCE": {
+        "inputs": [
             {
                 "name": "period",
                 "description": "Period to wait to reset sensor",
