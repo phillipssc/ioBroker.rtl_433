@@ -303,7 +303,7 @@ function initRuleFormCheck() {
     $('#rule').change((e) => { setTimeout( _initRuleFormCheck, 200) });
     _initRuleFormCheck();
     $('.opts-save, .opts-save-close').click(async (e) => {
-        if ($('action_type').val() === "update") {
+        if ($('#action_type').val() === "update") {
             await updateRule();
         }
         else {
@@ -317,15 +317,16 @@ function initRuleFormCheck() {
     });
 }
 
-function resetSensorsTab() { 
+async function resetSensorsTab() { 
     $('#devicesList').empty();
     $('#taskforms').empty();
-    initDevices();
+    await getDevices();
+    const rules = await getRules();
+    initRuleFormValues(rules);
 }
 
 function submitRule() {
     return new Promise((resolve, reject) => {
-        if ($('#action_type').val() === 'update') return(resolve(updateRule()));
         if ($('.opts-save').hasClass('disabled')) return(resolve());
         const device_id = $('#device_id').val();
         const rule = $('#rule').val();
@@ -344,7 +345,6 @@ function submitRule() {
                             sendTo(null, 'setState', `${devAddr}.${field}_:_${value}`, () => {});
                         }
                     }
-                    resolve();
                 }
             }
             resetSensorsTab();
@@ -380,9 +380,8 @@ function updateRule() {
 function deleteRule(e) {
     e.preventDefault();
     e.stopPropagation();
-    const targetElementId = e.target.parentElement.parentElement.id;
+    const targetElementId = $(e.target).parentsUntil('.device td')[1].id;
     sendTo(null, 'removeSettings', targetElementId, (list) => {
-        e.preventDefault()
         resetSensorsTab();
     });
 }
