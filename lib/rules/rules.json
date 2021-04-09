@@ -1,4 +1,28 @@
 {
+    "BADVAL": {
+        "inputs": [
+            {
+                "name": "field",
+                "description": "Field to monitor",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "badValue",
+                "description": "Eliminate this value in the field above from the stream of data",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            }
+        ],
+        "displayName": "Bad Value",
+        "filename": "badValue.js"
+    },
     "DEBOUNCE": {
         "inputs": [
             {
@@ -237,6 +261,39 @@
         ],
         "displayName": "Range Filter",
         "filename": "range.js"
+    },
+    "REPLACE": {
+        "inputs": [
+            {
+                "name": "field",
+                "description": "Field to monitor",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "search",
+                "description": "Search values, comma seperated",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            },
+            {
+                "name": "replace",
+                "description": "Replace values, comma seperated",
+                "type": "string",
+                "check": "string",
+                "value": "",
+                "input": true,
+                "output": true
+            }
+        ],
+        "displayName": "Replace Values",
+        "filename": "replace.js"
     },
     "RESET": {
         "inputs": [
