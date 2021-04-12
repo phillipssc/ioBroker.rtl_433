@@ -28,9 +28,10 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+.popup a.btn.opts-save-close,
 .popup a.btn.opts-cancel {
-    float: right;
-    margin-top: 15px;
+    /* float: right; */
+    margin-top: 0px;
     margin-right: 15px;
 }
 .popup div.opts,
@@ -97,4 +98,17 @@ textarea#run_box {
 }
 textarea#run_box.invalid {
     border: 5px solid #f44336;
+}
+.ruleType .circle {
+    width: 1em;
+    line-height: 1em;
+    border-radius: 50%;
+    text-align: center;
+    font-size: .8em;
+    border: 1px solid #000;
+    position: relative;
+    top: -17px;
+}
+.ruleType span {
+    margin-left: 13px;
 }

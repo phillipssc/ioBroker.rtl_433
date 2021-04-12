@@ -131,9 +131,16 @@ function getDevices() {
                             for (let i=0; i<channels.length; i++) {
                                 const channel = channels[i];
                                 if (channel.common.name != 'META' && channel.common.name != 'INFO') {
+                                    const regex = /^(.*)(\d+)$/;
+                                    const parts = regex.exec(channel.common.name);
+                                    const type = parts[1] || channel.common.name;
+                                    const version = parts[2] || '1';
                                     const icon = $('<div>', { "class": `opts-installed opts-${id}`, "id": `${id}.${channel.common.name}` }).append(
                                         $('<div>', { "class": "ruleText"}).append(
-                                            $('<div>', { "class": "ruleType"}).text(channel.common.name),
+                                            $('<div>', { "class": "ruleType"}).append(
+                                                $('<span>').text(type),
+                                                $('<div>', { "class": "circle"}).text(version)
+                                            ),
                                             $('<div>', { "id": `${id}-${channel.common.name}-ruleField`, "class": "ruleField"}),
                                         ),
                                         $('<div>', { "class": "iconField"}).append(
@@ -176,25 +183,36 @@ function getDevices() {
     });
 }
 
-function openAddRuleForm(e) {
-    const targetElementId = e.target.parentElement.id;
+function addFieldsToFieldDropdown(targetElementId) {
     sendTo(null, 'getStatesOf', targetElementId.replace('-ADD',''), (statesList) => {
         const regex = /^[\w-]+\.\d+\.[\w-]+\.[\w-]+$/;
         const states = JSON.parse(statesList).filter(state => regex.test(state._id));
-        $(`.fieldindxs`).empty();
+        $(`#fieldindx`).empty();
         states.forEach(state => {
             if(state.common.name !== "channel") {
-                $(`.fieldindxs`).append(
+                $(`#fieldindx`).append(
                     $('<option>', {"value": state.common.name}).text(state.common.name)
                 );
             }
         });
     });
+}
+
+function openAddRuleForm(e) {
+    const targetElementId = e.target.parentElement.id;
+    addFieldsToFieldDropdown(targetElementId);
+    $('#rule').attr('disabled', false).val($("#rule option:first").val()).change();
+    if (M) M.FormSelect.init($('#rule'), {});
     $('#device_id').val(targetElementId);
     $('#action_type').val('insert');
     $('#update_rule').addClass('hidden');
     $('#create_rule').removeClass('hidden');
     $('#popup').removeClass('hidden');
+    [...$('.popup input')].forEach( input => {
+        if (!$(input).hasClass('select-dropdown')) {
+            $(input).val($(input).attr('default'));
+        }
+    });
 }
 
 function openUpdateRuleForm(e) {
@@ -209,23 +227,12 @@ function openUpdateRuleForm(e) {
                 parts = regex.exec(parts[1]);
                 $(`#${parts[1]}-${field}`).val(JSON.parse(stateObj).val);
                 if (M) M.updateTextFields();
-                $('#rule').val(parts[1]).change();
+                $('#rule').val(parts[1]).attr('disabled', true).change();
                 if (M) M.FormSelect.init($('#rule'), {});
             });
         });
     });
-    sendTo(null, 'getStatesOf', targetElementId.split('.')[0], (statesList) => {
-        const regex = /^[\w-]+\.\d+\.[\w-]+\.[\w-]+$/;
-        const states = JSON.parse(statesList).filter(state => regex.test(state._id));
-        $(`.fieldindxs`).empty();
-        states.forEach(state => {
-            if(state.common.name !== "channel") {
-                $(`.fieldindxs`).append(
-                    $('<option>', {"value": state.common.name}).text(state.common.name)
-                );
-            }
-        });
-    });
+    addFieldsToFieldDropdown(targetElementId);
     $('#device_id').val(targetElementId);
     $('#action_type').val('update');
     $('#update_rule').removeClass('hidden');
@@ -235,13 +242,20 @@ function openUpdateRuleForm(e) {
 }
 
 function makeRuleForm(rule, fields) {
-    let section = $('<div>', { "class": rule === 'HEARTBEAT' ? "opts" : "opts hidden", "id": rule });
+    let section = $('<div>', { "class": "opts hidden", "id": rule });
     fields.forEach(field => {
         if (field.input) section.append(
             $('<div>',{ "class": "row" }).append(
                 $('<div>', { "class": "col s12 input-field"}).append(
-                    $('<input>', { "type": "text", "class": "rule", "id": `${rule}-${field.name}`, "list": `${rule}-${field.name}indxs`}),
-                    $(`<datalist id="${rule}-${field.name}indxs" class="${field.name}indxs">`),
+                    $('<input>', { 
+                        "type": "text",
+                        "class": "rule",
+                        "id": `${rule}-${field.name}`,
+                        "list": field.name === 'field' ? `fieldindx` : undefined,
+                        "value": field.value,
+                        "default": field.value
+                    }),
+                    //$(`<datalist id="${rule}-${field.name}indxs" class="${field.name}indxs">`),
                     $('<label>', { "for": `${rule}-${field.name}`, "class": "translate" }).text(`${field.name}`),
                     $('<span>', { "class": "translate" }).text(`${field.description}`)
                 )
@@ -293,28 +307,15 @@ function initRuleFormCheck() {
             if ($(input).hasClass('invalid') || $(input).val() === '') formValid = false;
         });
         if (formValid) {
-            $('.opts-save, .opts-save-close').removeClass('disabled');
+            $('.opts-save-close').removeClass('disabled');
         }
         else {
-            $('.opts-save, .opts-save-close').addClass('disabled');
+            $('.opts-save-close').addClass('disabled');
         }
     }
     $('.popup input').keyup((e) => { _initRuleFormCheck() });
     $('#rule').change((e) => { setTimeout( _initRuleFormCheck, 200) });
     _initRuleFormCheck();
-    $('.opts-save, .opts-save-close').click(async (e) => {
-        if ($('#action_type').val() === "update") {
-            await updateRule();
-        }
-        else {
-            await submitRule();
-        }
-        if ($(e.target.parentElement).hasClass('opts-save-close')) $('#popup').addClass('hidden');
-    });
-    $('#run_box').keyup((e) => { 
-        if ($(e.target).hasClass('invalid')) $('.opts-run').addClass('disabled');
-        else $('.opts-run').removeClass('disabled');
-    });
 }
 
 async function resetSensorsTab() { 
@@ -327,7 +328,7 @@ async function resetSensorsTab() {
 
 function submitRule() {
     return new Promise((resolve, reject) => {
-        if ($('.opts-save').hasClass('disabled')) return(resolve());
+        if ($('.opts-save-close').hasClass('disabled')) return(resolve());
         const device_id = $('#device_id').val();
         const rule = $('#rule').val();
         sendTo(null, 'createSettings', `${device_id.replace('-ADD','')}_:_${rule}`, async (chAddr) => {
@@ -355,7 +356,7 @@ function submitRule() {
 
 function updateRule() {
     return new Promise((resolve, reject) => {
-        if ($('.opts-save').hasClass('disabled')) return(resolve());
+        if ($('.opts-save-close').hasClass('disabled')) return(resolve());
         const device_id = $('#device_id').val();
         // populate the data...
         const inputs = [...$('.popup input:visible')];
@@ -831,4 +832,18 @@ async function initializeNonConfigData(settings) {
         $('#popup').addClass('hidden');
     });
     $('a.btn.opts-run').click(injectJSON);
+    $('.opts-save-close').click(async (e) => {
+        if ($('#action_type').val() === "update") {
+            await updateRule();
+        }
+        else {
+            await submitRule();
+        }
+        $('#popup').addClass('hidden');
+    });
+    $('#run_box').keyup((e) => { 
+        if ($(e.target).hasClass('invalid')) $('.opts-run').addClass('disabled');
+        else $('.opts-run').removeClass('disabled');
+    });
+    initRuleFormCheck();
 }
