@@ -37,8 +37,8 @@
             {
                 "name": "adjustment",
                 "description": "The amount to adjust the value by",
-                "type": "string",
-                "check": "string",
+                "type": "number",
+                "check": "float",
                 "value": "",
                 "input": true,
                 "output": true
@@ -51,10 +51,10 @@
         "inputs": [
             {
                 "name": "period",
-                "description": "Period to wait to reset sensor",
+                "description": "Milliseconds to wait to reset sensor",
                 "type": "number",
                 "check": "integer",
-                "value": 15000,
+                "value": 500,
                 "input": true,
                 "output": true
             }
@@ -66,7 +66,7 @@
         "inputs": [
             { 
                 "name": "heartbeat",
-                "description": "A generous estimate of time between signals",
+                "description": "A generous estimate of milliseconds between signals",
                 "type": "number",
                 "check": "integer",
                 "value": 30000,
@@ -323,10 +323,10 @@
             },
             {
                 "name": "period",
-                "description": "Period to wait to reset sensor",
+                "description": "Milliseconds to wait to reset sensor",
                 "type": "number",
                 "check": "integer",
-                "value": 15000,
+                "value": 5000,
                 "input": true,
                 "output": true
             },
