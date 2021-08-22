@@ -75,6 +75,8 @@ If you are experiencing trouble with a specific device, please let me know the o
 * a few more fixes
 ### 1.1.3
 * Fixed frequency hopping use in the configuration. Fixed a bug that crashed the adapter if an object was not correctly created. Hardened the ioBroker interface to errors with heavy use of try/catch and logging.
+### 1.1.4
+* Explicitly added ack=true to the setState commands to eliminate warnings in the logs, fixed bad selector that lost protocols when not on the protocols tab, updated dependencies.
 
 ## License
 MIT License

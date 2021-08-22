@@ -1,19 +1,19 @@
 {
     "common": {
         "name": "rtl_433",
-        "version": "1.1.3",
+        "version": "1.1.4",
         "news": {
-            "1.1.3": {
-                "en": "Improved the administration pages to be both more flexable and informative.  Changed how the adapter instanciates the rtl_433 utility for stability purpose.  Fixed many errors in the internationalization",
-                "de": "Die Verwaltungsseiten wurden verbessert, um sowohl flexibler als auch informativer zu sein. Es wurde geändert, wie der Adapter das Dienstprogramm rtl_433 aus Stabilitätsgründen instanziiert. Viele Fehler bei der Internationalisierung wurden behoben",
-                "ru": "Улучшены страницы администрирования, чтобы они стали более гибкими и информативными. В целях стабильности изменен способ создания экземпляра утилиты rtl_433 адаптером. Исправлено множество ошибок при интернационализации",
-                "pt": "Melhorou as páginas de administração para serem mais flexíveis e informativas. Alterado o modo como o adaptador instancia o utilitário rtl_433 para fins de estabilidade. Muitos erros corrigidos na internacionalização",
-                "nl": "Verbeterde beheerpagina's om zowel flexibeler als informatief te zijn. Wijziging van de manier waarop de adapter het hulpprogramma rtl_433 installeert voor stabiliteitsdoeleinden. Veel fouten in de internationalisering verholpen",
-                "fr": "Amélioration des pages d'administration pour qu'elles soient à la fois plus flexibles et informatives. Modification de la façon dont l'adaptateur instancie l'utilitaire rtl_433 à des fins de stabilité. Correction de nombreuses erreurs dans l'internationalisation",
-                "it": "Migliorate le pagine di amministrazione per essere più flessibili e informative. Modificato il modo in cui l'adattatore installa l'utilità rtl_433 a scopo di stabilità. Risolti molti errori nell'internazionalizzazione",
-                "es": "Se mejoraron las páginas de administración para que sean más flexibles e informativas. Se modificó la forma en que el adaptador instancia la utilidad rtl_433 con fines de estabilidad. Se corrigieron muchos errores en la internacionalización.",
-                "pl": "Ulepszono strony administracyjne, aby były bardziej elastyczne i zawierały informacje. Zmieniono sposób, w jaki adapter uruchamia narzędzie rtl_433 w celu zapewnienia stabilności. Naprawiono wiele błędów w internacjonalizacji",
-                "zh-cn": "改进了管理页面，使其更具灵活性和信息量。出于稳定的目的，更改了适配器实例化rtl_433实用程序的方式。修复了国际化中的许多错误"
+            "1.1.4": {
+                "en": "Explicitly added ack=true to the setState commands to eliminate warnings in the logs, fixed bad selector that lost protocols when not on the protocols tab, updated dependencies.",
+                "de": "Explizit ack=true zu den setState-Befehlen hinzugefügt, um Warnungen in den Protokollen zu beseitigen, fehlerhafter Selektor behoben, der Protokolle verlor, wenn er nicht auf der Registerkarte Protokolle war, aktualisierte Abhängigkeiten.",
+                "ru": "Явно добавлено ack = true к командам setState для устранения предупреждений в журналах, исправлен неверный селектор, который терял протоколы, когда они не были на вкладке протоколов, обновлены зависимости.",
+                "pt": "Adicionou explicitamente ack = true aos comandos setState para eliminar avisos nos logs, corrigiu o seletor incorreto que perdia protocolos quando não estava na guia de protocolos e atualizou as dependências.",
+                "nl": "Expliciet toegevoegd ack=true aan de setState-commando's om waarschuwingen in de logs te elimineren, slechte selector gerepareerd die protocollen verloor wanneer niet op het tabblad protocollen, bijgewerkte afhankelijkheden.",
+                "fr": "Ajout explicite de ack=true aux commandes setState pour éliminer les avertissements dans les journaux, correction d'un mauvais sélecteur qui perdait les protocoles lorsqu'il n'était pas dans l'onglet des protocoles, mise à jour des dépendances.",
+                "it": "Aggiunti esplicitamente ack=true ai comandi setState per eliminare gli avvisi nei log, corretto selettore errato che perdeva i protocolli quando non si trovava nella scheda dei protocolli, dipendenze aggiornate.",
+                "es": "Se agregó explícitamente ack = true a los comandos setState para eliminar las advertencias en los registros, se corrigió el mal selector que perdió protocolos cuando no estaba en la pestaña de protocolos, se actualizaron las dependencias.",
+                "pl": "Jawnie dodano ack=true do poleceń setState, aby wyeliminować ostrzeżenia w dziennikach, naprawiono zły selektor, który gubił protokoły, gdy nie był na karcie protokołów, zaktualizowano zależności.",
+                "zh-cn": "显式添加 ack=true 到 setState 命令以消除日志中的警告，修复了在不在协议选项卡上时丢失协议的错误选择器，更新了依赖项。"
             }
         },
         "title": "rtl_433",
