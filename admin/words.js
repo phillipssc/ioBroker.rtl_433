@@ -721,5 +721,29 @@ systemDictionary = {
         "es": "No disponible",
         "pl": "Niedostępne",
         "zh-cn": "无法使用"
+    },
+    "de-duplicate readings": {
+        "en": "de-duplicate readings",
+        "de": "Deduplizieren von Messwerten",
+        "ru": "дедублировать показания",
+        "pt": "deduplicar leituras",
+        "nl": "ontdubbelen van metingen",
+        "fr": "dédupliquer les lectures",
+        "it": "letture deduplicate",
+        "es": "lecturas duplicadas",
+        "pl": "deduplikaty odczytów",
+        "zh-cn": "重复读数"
+    },
+    "Record only changed values": {
+        "en": "Record only changed values",
+        "de": "Nur geänderte Werte aufzeichnen",
+        "ru": "Записывать только измененные значения",
+        "pt": "Registrar apenas valores alterados",
+        "nl": "Alleen gewijzigde waarden opnemen",
+        "fr": "Enregistrer uniquement les valeurs modifiées",
+        "it": "Registra solo i valori modificati",
+        "es": "Registrar solo valores modificados",
+        "pl": "Zapisz tylko zmienione wartości",
+        "zh-cn": "仅记录更改的值"
     }
 };

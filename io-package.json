@@ -1,108 +1,110 @@
 {
-    "common": {
-        "name": "rtl_433",
-        "version": "1.1.4",
-        "news": {
-            "1.1.4": {
-                "en": "Explicitly added ack=true to the setState commands to eliminate warnings in the logs, fixed bad selector that lost protocols when not on the protocols tab, updated dependencies.",
-                "de": "Explizit ack=true zu den setState-Befehlen hinzugefügt, um Warnungen in den Protokollen zu beseitigen, fehlerhafter Selektor behoben, der Protokolle verlor, wenn er nicht auf der Registerkarte Protokolle war, aktualisierte Abhängigkeiten.",
-                "ru": "Явно добавлено ack = true к командам setState для устранения предупреждений в журналах, исправлен неверный селектор, который терял протоколы, когда они не были на вкладке протоколов, обновлены зависимости.",
-                "pt": "Adicionou explicitamente ack = true aos comandos setState para eliminar avisos nos logs, corrigiu o seletor incorreto que perdia protocolos quando não estava na guia de protocolos e atualizou as dependências.",
-                "nl": "Expliciet toegevoegd ack=true aan de setState-commando's om waarschuwingen in de logs te elimineren, slechte selector gerepareerd die protocollen verloor wanneer niet op het tabblad protocollen, bijgewerkte afhankelijkheden.",
-                "fr": "Ajout explicite de ack=true aux commandes setState pour éliminer les avertissements dans les journaux, correction d'un mauvais sélecteur qui perdait les protocoles lorsqu'il n'était pas dans l'onglet des protocoles, mise à jour des dépendances.",
-                "it": "Aggiunti esplicitamente ack=true ai comandi setState per eliminare gli avvisi nei log, corretto selettore errato che perdeva i protocolli quando non si trovava nella scheda dei protocolli, dipendenze aggiornate.",
-                "es": "Se agregó explícitamente ack = true a los comandos setState para eliminar las advertencias en los registros, se corrigió el mal selector que perdió protocolos cuando no estaba en la pestaña de protocolos, se actualizaron las dependencias.",
-                "pl": "Jawnie dodano ack=true do poleceń setState, aby wyeliminować ostrzeżenia w dziennikach, naprawiono zły selektor, który gubił protokoły, gdy nie był na karcie protokołów, zaktualizowano zależności.",
-                "zh-cn": "显式添加 ack=true 到 setState 命令以消除日志中的警告，修复了在不在协议选项卡上时丢失协议的错误选择器，更新了依赖项。"
-            }
-        },
-        "title": "rtl_433",
-        "titleLang": {
-            "en": "rtl_433",
-            "de": "rtl_433",
-            "ru": "rtl_433",
-            "pt": "rtl_433",
-            "nl": "rtl_433",
-            "fr": "rtl_433",
-            "it": "rtl_433",
-            "es": "rtl_433",
-            "pl": "rtl_433",
-            "zh-cn": "rtl_433"
-        },
-        "desc": {
-            "en": "Spawns rtl_433 utility instantiates sensors",
-            "de": "Das Dienstprogramm rnl_433 von Spawns instanziiert Sensoren",
-            "ru": "Утилита Spawns rtl_433 создает экземпляры датчиков",
-            "pt": "Spawns rtl_433 utilitário instancia sensores",
-            "nl": "Spawns rtl_433 utility instantieert sensoren",
-            "fr": "L'utilitaire Spawns rtl_433 instancie les capteurs",
-            "it": "Genera l'utilità rtl_433 che istanzia i sensori",
-            "es": "La utilidad spawns rtl_433 crea una instancia de los sensores",
-            "pl": "Spawns narzędzie rtl_433 tworzy instancje czujników",
-            "zh-cn": "Spawns rtl_433实用程序实例化传感器"
-        },
-        "authors": [
-            "Sean Phillips <sean.c.phillips@gmail.com>"
-        ],
-        "keywords": [
-            "rtl_433",
-            "433MHz",
-            "thermometers",
-            "contact"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "rtl_433.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/phillipssc/ioBroker.rtl_433/master/admin/rtl_433.png",
-        "readme": "https://github.com/phillipssc/ioBroker.rtl_433/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "protocols",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "push",
-        "materialize": true,
-        "messagebox": true,
-        "dependencies": [
-            {
-                "js-controller": ">=1.4.2"
-            }
-        ]
+  "common": {
+    "name": "rtl_433",
+    "version": "1.1.5",
+    "news": {
+      "1.1.5": {
+        "en": "In previous versions I only recorded values that differed from the previous value.  Now you have an option to de-duplicate the values or not.  Updated dependencies.",
+        "de": "In früheren Versionen habe ich nur Werte aufgezeichnet, die vom vorherigen Wert abwichen. Jetzt haben Sie die Möglichkeit, die Werte zu deduplizieren oder nicht. Aktualisierte Abhängigkeiten.",
+        "ru": "В предыдущих версиях я записывал только те значения, которые отличались от предыдущего значения. Теперь у вас есть возможность дедуплицировать значения или нет. Обновлены зависимости.",
+        "pt": "Nas versões anteriores só registrava valores que diferiam do valor anterior. Agora você tem a opção de desduplicar os valores ou não. Dependências atualizadas.",
+        "nl": "In eerdere versies heb ik alleen waarden vastgelegd die afweken van de vorige waarde. Nu heb je een optie om de waarden te dedupliceren of niet. Bijgewerkte afhankelijkheden.",
+        "fr": "Dans les versions précédentes, je n'enregistrais que les valeurs qui différaient de la valeur précédente. Vous avez maintenant la possibilité de dédupliquer ou non les valeurs. Dépendances mises à jour.",
+        "it": "Nelle versioni precedenti ho registrato solo valori che differivano dal valore precedente. Ora hai un'opzione per deduplicare i valori o meno. Dipendenze aggiornate.",
+        "es": "En versiones anteriores solo registraba valores que diferían del valor anterior. Ahora tiene la opción de desduplicar los valores o no. Dependencias actualizadas.",
+        "pl": "W poprzednich wersjach zapisywałem tylko wartości, które różniły się od poprzedniej wartości. Teraz masz możliwość usunięcia duplikatów wartości lub nie. Zaktualizowane zależności.",
+        "zh-cn": "在以前的版本中，我只记录了与以前的值不同的值。现在您可以选择是否删除重复值。更新了依赖项。"
+      }
     },
-    "native": {
-        "protocols": "",
-        "C_or_F": "C",
-        "frequency": "",
-        "adapterno": "",
-        "include": true,
-        "killcheckinterval": 30000,
-        "lifetime": 60000,
-        "rtl_433_cmd": "rtl_433 -F json"
+    "title": "rtl_433",
+    "titleLang": {
+      "en": "rtl_433",
+      "de": "rtl_433",
+      "ru": "rtl_433",
+      "pt": "rtl_433",
+      "nl": "rtl_433",
+      "fr": "rtl_433",
+      "it": "rtl_433",
+      "es": "rtl_433",
+      "pl": "rtl_433",
+      "zh-cn": "rtl_433"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Whether rtl_433 is connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
-    ]
-  }
+    "desc": {
+      "en": "Spawns rtl_433 utility instantiates sensors",
+      "de": "Das Dienstprogramm rnl_433 von Spawns instanziiert Sensoren",
+      "ru": "Утилита Spawns rtl_433 создает экземпляры датчиков",
+      "pt": "Spawns rtl_433 utilitário instancia sensores",
+      "nl": "Spawns rtl_433 utility instantieert sensoren",
+      "fr": "L'utilitaire Spawns rtl_433 instancie les capteurs",
+      "it": "Genera l'utilità rtl_433 che istanzia i sensori",
+      "es": "La utilidad spawns rtl_433 crea una instancia de los sensores",
+      "pl": "Spawns narzędzie rtl_433 tworzy instancje czujników",
+      "zh-cn": "Spawns rtl_433实用程序实例化传感器"
+    },
+    "authors": [
+      "Sean Phillips <sean.c.phillips@gmail.com>"
+    ],
+    "keywords": [
+      "rtl_433",
+      "433MHz",
+      "thermometers",
+      "contact"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "rtl_433.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/phillipssc/ioBroker.rtl_433/master/admin/rtl_433.png",
+    "readme": "https://github.com/phillipssc/ioBroker.rtl_433/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "protocols",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "push",
+    "materialize": true,
+    "messagebox": true,
+    "dependencies": [
+      {
+        "js-controller": ">=1.4.2"
+      }
+    ],
+    "installedFrom": "phillipssc/ioBroker.rtl_433#d88a45898740a900d4ffd95341cbc191868c5fa2"
+  },
+  "native": {
+    "protocols": "",
+    "C_or_F": "C",
+    "frequency": "",
+    "adapterno": "",
+    "deduplicate": true,
+    "include": true,
+    "killcheckinterval": 30000,
+    "lifetime": 60000,
+    "rtl_433_cmd": "rtl_433 -F json"
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Whether rtl_433 is connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
+}
