@@ -79,6 +79,8 @@ If you are experiencing trouble with a specific device, please let me know the o
 * Explicitly added ack=true to the setState commands to eliminate warnings in the logs, fixed bad selector that lost protocols when not on the protocols tab, updated dependencies.
 ### 1.1.5
 * In previous versions I only recorded values that differed from the previous value.  Now you have an option to de-duplicate the values or not.  Updated dependencies.
+### 1.1.6
+* Fixed the error about "parentChannel" and updated dependencies
 
 ## License
 MIT License
