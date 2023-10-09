@@ -1,19 +1,20 @@
 {
   "common": {
     "name": "rtl_433",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "news": {
-      "1.1.5": {
-        "en": "In previous versions I only recorded values that differed from the previous value.  Now you have an option to de-duplicate the values or not.  Updated dependencies.",
-        "de": "In früheren Versionen habe ich nur Werte aufgezeichnet, die vom vorherigen Wert abwichen. Jetzt haben Sie die Möglichkeit, die Werte zu deduplizieren oder nicht. Aktualisierte Abhängigkeiten.",
-        "ru": "В предыдущих версиях я записывал только те значения, которые отличались от предыдущего значения. Теперь у вас есть возможность дедуплицировать значения или нет. Обновлены зависимости.",
-        "pt": "Nas versões anteriores só registrava valores que diferiam do valor anterior. Agora você tem a opção de desduplicar os valores ou não. Dependências atualizadas.",
-        "nl": "In eerdere versies heb ik alleen waarden vastgelegd die afweken van de vorige waarde. Nu heb je een optie om de waarden te dedupliceren of niet. Bijgewerkte afhankelijkheden.",
-        "fr": "Dans les versions précédentes, je n'enregistrais que les valeurs qui différaient de la valeur précédente. Vous avez maintenant la possibilité de dédupliquer ou non les valeurs. Dépendances mises à jour.",
-        "it": "Nelle versioni precedenti ho registrato solo valori che differivano dal valore precedente. Ora hai un'opzione per deduplicare i valori o meno. Dipendenze aggiornate.",
-        "es": "En versiones anteriores solo registraba valores que diferían del valor anterior. Ahora tiene la opción de desduplicar los valores o no. Dependencias actualizadas.",
-        "pl": "W poprzednich wersjach zapisywałem tylko wartości, które różniły się od poprzedniej wartości. Teraz masz możliwość usunięcia duplikatów wartości lub nie. Zaktualizowane zależności.",
-        "zh-cn": "在以前的版本中，我只记录了与以前的值不同的值。现在您可以选择是否删除重复值。更新了依赖项。"
+      "1.1.6": {
+        "en": "Fixed the error about \"parentChannel\" and updated dependencies",
+        "de": "Fehler behoben über Elternteil Kanal und aktualisierte Abhängigkeiten",
+        "ru": "Исправлена ошибка о родителе Канал и обновленные зависимости",
+        "pt": "Corrigido o erro sobre o pai Canal e dependências atualizadas",
+        "nl": "De fout over ouder Kanaal en updates van afhankelijkheid",
+        "fr": "Correction de l'erreur concernant le parent Canal et dépendances à jour",
+        "it": "Risolto l'errore sul genitore Canale e dipendenze aggiornate",
+        "es": "Arregla el error sobre el padre Canal y dependencias actualizadas",
+        "pl": "Będąc błędem dotyczącym rodzicielstwa. Kanał i aktualizacja",
+        "uk": "Виправлено помилку про батьків Канал і оновлені залежності",
+        "zh-cn": "确定父母的错误 地点和最新频率"
       }
     },
     "title": "rtl_433",
