@@ -12,7 +12,60 @@
 
 ## rtl_433 adapter for ioBroker
 
-This adapter allows you to integrate data from the airwaves into ioBroker using an inexpensive [RTL-SDR](https://www.rtl-sdr.com/) USB stick.  These are built around chips originally used to tune in analog TV signals but are now used as software defined radios.  433 MHz is a common frequency as it is open in the US.  The software defined radio is capable of tuning in most of the open frequency bands, the parameters of this adapter allow you to configure the frequency you need.  
+Due to the insufficient documentation in ioBroker, I am no longer compelled to maintain this adapter.  
+
+Method "createState" is deprecated and will be removed in js-controller 7.1, use "extendObject/setObjectNotExists" (Issue #24)
+
+[createState](https://github.com/ioBroker/ioBroker.javascript/blob/master/docs/en/javascript.md#createstate)
+[extendObject](https://en.photo-ac.com/photo/4618988/vast-desert)
+[setObjectNotExists](https://en.photo-ac.com/photo/4618988/vast-desert)
+
+The entire extent of the documentation is this:
+- extendObject = function extendObject(id, obj, callback)
+- setObject = function setObject(id, obj, callback)
+- setObjectNotExists = function setObjectNotExists(id, object, callback)
+
+How to write object
+To write the objects generally two functions can be used: setObject, setForeignObject. But there are many help functions to modify objects:
+
+extendObject, extendForeignObject,
+delObject, delForeignObject,
+setObjectNotExists, setForeignObjectNotExists
+createDevice, deleteDevice
+createChannel, deleteChannel,
+createState, deleteState
+addStateToEnum, deleteStateFromEnum
+extendObject is just reads object, merges with given one and write object back.
+
+Difference between xxxObject and xxxForeignObject is that xxxObject automatically extends the object id with "adapter.instance." text.
+
+Functions are always asynchronous.
+```
+adapter.getForeignObject('otherAdapter.X.someState', function (err, obj) {
+    if (err) {
+        adapter.log.error(err);
+    } else {
+        adapter.log.info(JSON.stringify(obj));
+        obj.native = {}; // modify object
+        adapter.setForeignObject(obj._id, obj, function (err) {
+            if (err) adapter.log.error(err);
+        });
+    }
+});
+```
+
+Yep, that's what was given to replace createState.  I spent an hour, frustrated for not getting anywhere I gave up and forgot about it.  Why does the depreciated function have way better documentation than the recommended one?  Why doesn't the recommended one have any documentation at all?  Then, ioBroker members started contacting me.  I asked further questions, no one could offer any help.  It seems like they do not want to make it easy for people to develop adapters anymore.
+
+FUBAR
+
+I have three recommendations for those looking for this:
+1) Stick a fork in it and fix it yourself - fluency in German and hacking recommended.
+2) Give up on ioBroker, it is obvious HomeAssistant has won this battle.
+3) rtl_433 -> mqtt utility from GitHub
+
+To make breaking changes to the underlying API of a home automation application is the kind of garbage that made me walk away from OpenHAB and come to ioBroker.  Alas, ioBroker is now even worse.  If I rebuild this adapter, it won't be for ioBroker
+
+This adapter allowed you to integrate data from the airwaves into ioBroker using an inexpensive [RTL-SDR](https://www.rtl-sdr.com/) USB stick.  These are built around chips originally used to tune in analog TV signals but are now used as software defined radios.  433 MHz is a common frequency as it is open in the US.  The software defined radio is capable of tuning in most of the open frequency bands, the parameters of this adapter allow you to configure the frequency you need.  
 
 You can use multiple RTL-SDR dongles to monitor multiple frequencies by setting up more than one instance of iobroker.rtl_433.  Options are available to use the native index of the device to rtl_433, the USB port, a TCP/IP address and others as supported by the rtl_433 utility. 
 
